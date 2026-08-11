@@ -1,36 +1,16 @@
 {
   "sections": {
-    "banner": {
-      "type": "main-collection-banner",
+    "main": {
+      "type": "flint-main-collection",
       "settings": {
-        "show_collection_description": true,
-        "show_collection_image": false,
-        "color_scheme": "scheme-1"
-      }
-    },
-    "product-grid": {
-      "type": "main-collection-product-grid",
-      "settings": {
-        "products_per_page": 16,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "enable_filtering": true,
-        "filter_type": "horizontal",
-        "enable_sorting": true,
-        "columns_mobile": "2",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "break_after": 12,
+        "break_kicker": "Guide",
+        "break_heading": "How high should wall lights be?",
+        "break_body": "Most sit best between 1.5 and 1.7 metres from the floor. Here is how to decide, room by room — and what to do about a headboard.",
+        "break_link_label": "Read the guide",
+        "break_placeholder": "flint-ph-room-bedroom.webp"
       }
     }
   },
-  "order": [
-    "banner",
-    "product-grid"
-  ]
+  "order": ["main"]
 }

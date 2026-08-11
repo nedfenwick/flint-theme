@@ -1,0 +1,105 @@
+/* ==========================================================================
+   FLINT — COLLECTION PAGE (Brand Manual §23)
+   Loaded on the collection template only.
+   ========================================================================== */
+
+.flint-coll__head { padding-block: var(--sp-5) var(--sp-7); max-width: 62ch; }
+.flint-coll__intro {
+  font-family: var(--font-serif); font-weight: var(--weight-light);
+  font-size: var(--size-lede); line-height: var(--lh-lede);
+  margin-top: var(--sp-3);
+}
+
+.flint-coll__layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: clamp(24px, 3vw, 56px);
+  align-items: start;
+}
+@media (max-width: 1023px) { .flint-coll__layout { grid-template-columns: 1fr; } }
+
+/* -- Filter rail ---------------------------------------------------------- */
+.flint-filters { position: sticky; top: var(--sp-5); }
+.flint-filters__group { border-bottom: var(--hairline) solid var(--border-default); }
+.flint-filters__group summary {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-block: var(--sp-3); cursor: pointer; list-style: none;
+  font-size: var(--size-label); font-weight: var(--weight-semibold);
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  color: var(--text-secondary); min-height: var(--tap-min);
+}
+.flint-filters__group summary::-webkit-details-marker { display: none; }
+.flint-filters__group summary::after { content: '+'; letter-spacing: 0; font-size: 14px; }
+.flint-filters__group[open] summary::after { content: '\2212'; }
+.flint-filters__body { padding-bottom: var(--sp-4); }
+
+.flint-filters__row {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding-block: 5px; font-size: var(--size-small); cursor: pointer;
+}
+.flint-filters__row input { width: 15px; height: 15px; accent-color: var(--flint-flint); flex: 0 0 auto; }
+.flint-filters__row span { color: var(--text-primary); }
+.flint-filters__row .count { color: var(--text-secondary); margin-left: auto; font-variant-numeric: tabular-nums; }
+.flint-filters__row.is-disabled { opacity: .4; }
+
+.flint-filters__range { display: flex; gap: var(--sp-2); align-items: center; }
+.flint-filters__range input { width: 100%; }
+
+/* -- Toolbar -------------------------------------------------------------- */
+.flint-coll__bar {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: var(--sp-4); padding-bottom: var(--sp-4);
+  border-bottom: var(--hairline) solid var(--border-default);
+  margin-bottom: var(--grid-row-gap);
+}
+.flint-coll__count { font-size: var(--size-small); color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.flint-coll__sort {
+  font-family: var(--font-sans); font-size: var(--size-small);
+  border: 0; background: none; color: var(--text-primary);
+  padding: var(--sp-2) 0; cursor: pointer;
+}
+
+/* Active filter chips */
+.flint-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.flint-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--size-cap); letter-spacing: .04em;
+  border: var(--hairline) solid var(--border-default);
+  padding: 5px 10px; color: var(--text-primary); text-decoration: none;
+}
+.flint-chip:hover { border-color: var(--border-strong); }
+.flint-chip::after { content: '\00d7'; color: var(--text-secondary); }
+
+/* -- Mobile filter drawer ------------------------------------------------- */
+.flint-filters__toggle { display: none; }
+@media (max-width: 1023px) {
+  .flint-filters__toggle { display: inline-flex; }
+  .flint-filters {
+    position: fixed; inset: 0; z-index: 60; background: var(--surface-page);
+    overflow-y: auto; padding: var(--sp-4) var(--container-pad) 96px;
+    transform: translateY(100%); transition: transform var(--dur) var(--ease);
+  }
+  .flint-filters.is-open { transform: translateY(0); }
+  .flint-filters__apply {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    padding: var(--sp-3) var(--container-pad);
+    padding-bottom: calc(var(--sp-3) + env(safe-area-inset-bottom));
+    background: var(--surface-raised);
+    border-top: var(--hairline) solid var(--border-default);
+  }
+  .flint-filters__apply .flint-btn { width: 100%; }
+}
+@media (min-width: 1024px) { .flint-filters__close, .flint-filters__apply { display: none; } }
+
+/* -- Editorial break ------------------------------------------------------ */
+.flint-coll__break { grid-column: 1 / -1; margin-block: var(--sp-4); }
+
+/* -- Pagination ----------------------------------------------------------- */
+.flint-pagination {
+  display: flex; justify-content: center; gap: var(--sp-4);
+  padding-top: var(--section-pad);
+  font-size: var(--size-small); font-variant-numeric: tabular-nums;
+}
+.flint-pagination a, .flint-pagination span { color: var(--text-secondary); text-decoration: none; padding: var(--sp-2); }
+.flint-pagination a:hover { color: var(--text-primary); }
+.flint-pagination [aria-current] { color: var(--text-primary); border-bottom: var(--hairline) solid var(--accent-hairline); }

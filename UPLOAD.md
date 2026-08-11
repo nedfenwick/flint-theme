@@ -1,79 +1,73 @@
-# Flint theme — batch 2: the product page
+# Flint theme — batch 3: the collection page
 
-Seven files. Same routine as before.
+Four files.
 
 ---
 
 ## Upload
 
-In your `flint-theme` repo: **Add file → Upload files**, drag in these four
-folders from the unzipped batch, commit.
+`flint-theme` repo → **Add file → Upload files** → drag these four folders in
+→ commit. Then tell me and I'll verify before you look.
 
 ```
-assets/       flint-product.css
-layout/       theme.liquid          (replaces batch 1's — loads the product CSS)
-sections/     flint-main-product.liquid, flint-design-family-section.liquid
-snippets/     flint-breadcrumb.liquid, flint-design-family.liquid
-templates/    product.json
+assets/       flint-collection.css
+layout/       theme.liquid           (replaces batch 2's)
+sections/     flint-main-collection.liquid
+templates/    collection.json
 ```
-
-Then message me. I'll verify every file landed via the API before you look —
-that's the step that was missing last time, and it's why two broken files sat
-there silently.
 
 ---
 
-## Then: product images
+## Then: turn the filters on
 
-I created four sample products with full specification data, but Shopify's
-connector doesn't let me upload images. Two minutes of dragging:
+The filters are Shopify's native storefront filtering, which needs one free
+first-party app to configure. Without it the rail is empty — the page still
+works, it just has nothing to filter by.
 
-1. **Products → Alden Wall Light → Media**, drag in `product-alden-wall-light.webp`,
-   then `card-bedroom.webp` as the second image.
-2. Same for Elmore Pendant (`product-elmore-pendant.webp`, `card-kitchen.webp`),
-   Marle Table Lamp (`product-marle-table-lamp.webp`, `card-bedroom.webp`),
-   Hartley Picture Light (`product-hartley-picture-light.webp`, `card-hallway.webp`).
+1. Install **Search & Discovery** (Shopify, free) from the App Store.
+2. Open it → **Filters** → **Add filter**.
+3. Add these, in this order:
 
-The second image is what the product card crossfades to on hover, so the order
-matters. The images are in `flint-theme/assets/img/` in your working folder.
+   | Filter | Source | Why |
+   |---|---|---|
+   | Finish | Product option: Finish | How people coordinate a house |
+   | Price | Price | Expected |
+   | Room | Metafield: `flint.room_suitability` | Matches how renovators think |
+   | Material | Metafield: `flint.materials` | Opal, ribbed, ceramic, linen |
+   | IP rating | Metafield: `flint.ip_rating` | **Nobody in the mid-market offers this** |
+   | Dimmable | Metafield: `flint.dimmable` | Solves a real post-purchase regret |
+   | Bulb included | Metafield: `flint.bulb_included` | Removes a common surprise |
+   | Width | Metafield: `flint.width_mm` | The one that matters for fitting |
+   | Drop | Metafield: `flint.drop_max_mm` | Low ceilings, constantly asked |
+
+The last four are the point. Filtering by IP rating, dimmability, width and
+drop is the difference between a catalogue and something genuinely useful —
+and it costs nothing but the setup, because the data is already in the
+metafields.
 
 ---
 
 ## What to look at
 
-Open **Alden Wall Light** in the preview. It has four finishes, the full
-specification, and all four "Good to know" answers.
+Open **Wall Lights** in the preview. With one product in it the grid is
+sparse, which is expected.
 
-- **Good to know** — the Cortex block. Four questions, always the same four,
-  in plain English. This is the single biggest differentiator on the page.
-- **The accordions** — every value reads from a metafield. Nothing is typed
-  into the page.
-- **Click through the finishes** — price, name and URL update without a reload.
-- **Narrow the window** — the buy bar appears at the bottom once the gallery
-  scrolls away.
-- **The Alden family module** is empty because only one Alden exists. Add an
-  Alden Pendant with the same Design family value and it populates itself.
-
----
-
-## Known gaps, deliberately
-
-- **Downloads accordion** says specification sheets are added as products are
-  drawn. True — the generator comes in a later batch.
-- **No line drawing** in the gallery yet, for the same reason.
-- **Finish swatches are CSS gradients.** They must become cropped photographs
-  of the real metal before launch (§25). The classes are already in place.
-- **Delivery shows a despatch window, not a date.** A real date needs shipping
-  configured, which is a later task.
+- **The intro** reads from the collection's Category introduction metafield,
+  falling back to its description. Useful, not promotional.
+- **The editorial break** sits after product 12 by default, so with four
+  products you won't see it. Drop "Insert after N products" to 4 in the
+  customiser if you want to check it renders.
+- **Narrow the window** — the filter rail becomes a full-screen drawer with a
+  sticky Apply button.
+- **Sort defaults to the collection's own order**, not best-selling. These are
+  merchandised, not automated.
+- **Pagination, not infinite scroll** — 24 per page. Infinite scroll destroys
+  the footer and makes an edited range feel endless.
 
 ---
 
-## About the sample products
+## Still deliberately absent
 
-They are tagged `sample-data` so you can find them: search `tag:sample-data`
-in Products. Every dimension, wattage and IP rating in them is **invented**.
-They exist so the template can be built and judged against real structure.
-
-Before anything goes live, every figure must be replaced with verified supplier
-data. An invented IP rating on a live bathroom product is a safety and
-compliance problem, not a typo.
+No "quick add" on the cards. No star ratings. No sale badges. No "X left in
+stock". If the grid feels quiet compared with competitors, that is the
+intended difference, not an omission.
