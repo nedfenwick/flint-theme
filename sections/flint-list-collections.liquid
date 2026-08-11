@@ -1,0 +1,48 @@
+{%- comment -%}
+  FLINT — ALL COLLECTIONS (/collections)
+  The landing page behind the top-level nav items. Category tiles, nothing else.
+{%- endcomment -%}
+
+<div class="flint-container">
+  <header class="flint-coll__head">
+    <h1 class="h2">{{ section.settings.heading }}</h1>
+    {%- if section.settings.intro != blank -%}
+      <div class="flint-coll__intro">{{ section.settings.intro }}</div>
+    {%- endif -%}
+  </header>
+
+  <div class="flint-tiles" style="--cols: 4; --cols-md: 3; --cols-sm: 2; padding-bottom: var(--section-pad);">
+    {%- for col in collections -%}
+      {%- unless col.handle == 'frontpage' -%}
+        <a class="flint-tile" href="{{ col.url }}">
+          <div class="flint-media flint-media--product">
+            {%- if col.image -%}
+              {{ col.image | image_url: width: 900 | image_tag: loading: 'lazy',
+                 sizes: '(max-width: 767px) 50vw, 22vw', widths: '300,450,600,900', alt: col.title }}
+            {%- elsif col.products.first.featured_media -%}
+              {{ col.products.first.featured_media | image_url: width: 900 | image_tag: loading: 'lazy',
+                 sizes: '(max-width: 767px) 50vw, 22vw', widths: '300,450,600,900', alt: col.title }}
+            {%- endif -%}
+          </div>
+          <h2 class="flint-tile__title">{{ col.title }}</h2>
+          <p class="flint-card__meta">
+            {{ col.all_products_count }}
+            {%- if col.all_products_count == 1 %} product{% else %} products{% endif -%}
+          </p>
+        </a>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "All collections",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Lighting" },
+    { "type": "textarea", "id": "intro", "label": "Introduction",
+      "default": "Wall lights, pendants, picture lights and lamps in aged brass, bronze, opal glass and ceramic. Made to suit an old house or a new one, and priced so a whole project is possible." }
+  ]
+}
+{% endschema %}
