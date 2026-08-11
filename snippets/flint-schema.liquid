@@ -1,0 +1,89 @@
+{%- comment -%}
+  FLINT - STRUCTURED DATA (section 23)
+  Product, Breadcrumb, WebSite JSON-LD. Rendered once from theme.liquid;
+  it switches on the template itself.
+
+  Product data comes from the flint.* metafields, so rich results stay in step
+  with the page rather than drifting out of date.
+{%- endcomment -%}
+
+{%- if template.name == 'product' and product != blank -%}
+  {%- liquid
+    assign mf = product.metafields.flint
+    assign v = product.selected_or_first_available_variant
+  -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "description": {{ product.description | strip_html | truncate: 320 | json }},
+    {% if product.featured_media -%}
+    "image": [{{ product.featured_media | image_url: width: 1600 | prepend: 'https:' | json }}],
+    {%- endif %}
+    "sku": {{ v.sku | json }},
+    "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+    {% if mf.materials.value -%}
+    "material": {{ mf.materials.value | join: ', ' | json }},
+    {%- endif %}
+    {% if mf.weight_kg.value -%}
+    "weight": { "@type": "QuantitativeValue", "value": {{ mf.weight_kg.value }}, "unitCode": "KGM" },
+    {%- endif %}
+    {% if mf.height_mm.value -%}
+    "height": { "@type": "QuantitativeValue", "value": {{ mf.height_mm.value }}, "unitCode": "MMT" },
+    {%- endif %}
+    {% if mf.width_mm.value -%}
+    "width": { "@type": "QuantitativeValue", "value": {{ mf.width_mm.value }}, "unitCode": "MMT" },
+    {%- endif %}
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "lowPrice": {{ product.price_min | divided_by: 100.0 | json }},
+      "highPrice": {{ product.price_max | divided_by: 100.0 | json }},
+      "offerCount": {{ product.variants.size }},
+      "availability": {% if product.available %}"https://schema.org/InStock"{% else %}"https://schema.org/OutOfStock"{% endif %},
+      "url": {{ shop.url | append: product.url | json }},
+      "seller": { "@type": "Organization", "name": {{ shop.name | json }} }
+    }
+  }
+  </script>
+{%- endif -%}
+
+{%- if template.name == 'product' or template.name == 'collection' -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ shop.url | json }} }
+      {%- if template.name == 'collection' -%}
+      , { "@type": "ListItem", "position": 2, "name": {{ collection.title | json }}, "item": {{ shop.url | append: collection.url | json }} }
+      {%- else -%}
+        {%- assign col = collection | default: product.collections.first -%}
+        {%- if col -%}
+      , { "@type": "ListItem", "position": 2, "name": {{ col.title | json }}, "item": {{ shop.url | append: col.url | json }} }
+      , { "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+        {%- else -%}
+      , { "@type": "ListItem", "position": 2, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+        {%- endif -%}
+      {%- endif -%}
+    ]
+  }
+  </script>
+{%- endif -%}
+
+{%- if template.name == 'index' -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{ shop.url }}/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+{%- endif -%}
