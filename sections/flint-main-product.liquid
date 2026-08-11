@@ -72,9 +72,17 @@
       <h1 class="flint-pdp__title h2">{{ product.title }}</h1>
 
       <p class="flint-price" data-flint-price>{{ v.price | money_without_trailing_zeros }}</p>
-      <p class="flint-caption" style="margin-top: var(--sp-1);">
-        Including VAT.{% if section.settings.delivery_note != blank %} {{ section.settings.delivery_note }}{% endif %}
-      </p>
+      {%- comment -%}
+        Only claim "Including VAT" once actually VAT registered. Saying it
+        otherwise is a misrepresentation, not a rounding error.
+      {%- endcomment -%}
+      {%- capture price_note -%}
+        {%- if section.settings.show_vat %}Including VAT.{% endif -%}
+        {%- if section.settings.delivery_note != blank %} {{ section.settings.delivery_note }}{% endif -%}
+      {%- endcapture -%}
+      {%- if price_note != blank -%}
+        <p class="flint-caption" style="margin-top: var(--sp-1);">{{ price_note }}</p>
+      {%- endif -%}
 
       {%- if product.description != blank -%}
         <div class="flint-pdp__intro">{{ product.description }}</div>
@@ -317,6 +325,8 @@
   "name": "Product page",
   "tag": "section",
   "settings": [
+    { "type": "checkbox", "id": "show_vat", "label": "Show \"Including VAT\"", "default": false,
+      "info": "Only switch this on once Flint is VAT registered." },
     { "type": "text", "id": "delivery_note", "label": "Price note", "default": "Free UK delivery over £75." },
     { "type": "text", "id": "despatch", "label": "Despatch", "default": "Despatched within 2 working days" },
     { "type": "text", "id": "returns", "label": "Returns", "default": "30 days" },

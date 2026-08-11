@@ -1,5 +1,5 @@
 {%- comment -%}
-  FLINT - CONTACT (section 09 voice, section 23 layout)
+  FLINT — CONTACT (§09 voice, §23 layout)
   Two columns: how to reach us, and a form. Response time stated once, at the
   top, rather than buried. Emails are links, not text.
 {%- endcomment -%}
@@ -112,7 +112,16 @@
   .flint-field-group { margin-bottom: var(--sp-4); }
   .flint-field-group .flint-label { display: block; margin-bottom: var(--sp-2); }
   .flint-field--area { height: auto; padding: var(--sp-3) var(--sp-4); line-height: 1.6; resize: vertical; }
-  select.flint-field { appearance: none; background-image: none; }
+  /* A custom chevron, because appearance:none removes the native one and a
+     select with no affordance is not a select as far as anyone can tell. */
+  select.flint-field {
+    appearance: none;
+    padding-right: 44px;
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 11px 7px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7' fill='none'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23645F57' stroke-width='1.25'/%3E%3C/svg%3E");
+  }
   .flint-contact__form .flint-btn { margin-top: var(--sp-2); }
   @media (max-width: 599px) { .flint-contact__form .flint-btn { width: 100%; } }
 </style>

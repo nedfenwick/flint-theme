@@ -1,25 +1,24 @@
 {
   "sections": {
     "main": {
-      "type": "main-page",
-      "settings": {
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "form": {
-      "type": "contact-form",
-      "settings": {
-        "heading": "",
-        "heading_size": "h1",
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
+      "type": "flint-main-page-contact",
+      "blocks": {
+        "general": { "type": "route", "settings": {
+          "label": "General",
+          "email": "hello@flintlighting.co.uk",
+          "note": "Orders, deliveries, returns, and anything you are not sure who to ask." } },
+        "trade": { "type": "route", "settings": {
+          "label": "Trade",
+          "email": "trade@flintlighting.co.uk",
+          "note": "Designers, architects, developers and hospitality. Quotes within 48 hours." } },
+        "spec": { "type": "route", "settings": {
+          "label": "Specification",
+          "email": "hello@flintlighting.co.uk",
+          "note": "Unsure whether a fitting suits your room? Tell us the room, the ceiling height and what the light is for, and we will tell you honestly — including when the answer is that we do not make the right thing." } }
+      },
+      "block_order": ["general", "trade", "spec"],
+      "settings": {}
     }
   },
-  "order": [
-    "main",
-    "form"
-  ]
+  "order": ["main"]
 }

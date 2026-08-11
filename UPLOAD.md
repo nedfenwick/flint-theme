@@ -1,82 +1,67 @@
-# Flint theme — batch 4: everything that was left
+# Flint theme — batch 5: audit fixes
 
-Thirteen files. This completes the storefront: cart, search, content pages,
-the Journal, and 404.
+Seven files. Three real fixes, four for repo parity.
 
 ---
 
 ## Upload
 
-`flint-theme` repo → **Add file → Upload files** → drag these four folders in
-→ commit. Then tell me and I'll verify.
+`flint-theme` repo → **Add file → Upload files** → drag the folders → commit.
 
 ```
-assets/       flint-pages.css
-layout/       theme.liquid                (replaces batch 3's)
-sections/     flint-main-cart.liquid, flint-main-search.liquid,
-              flint-main-page.liquid, flint-main-blog.liquid,
-              flint-main-article.liquid, flint-404.liquid
-templates/    cart.json, search.json, page.json,
-              blog.json, article.json, 404.json
+layout/       theme.liquid                      (parity — already live)
+sections/     flint-main-product.liquid         *** VAT fix
+              flint-main-collection.liquid      *** accessibility fix
+              flint-main-page-contact.liquid    *** usability fix
+snippets/     flint-fonts.liquid                (new — do not use yet, see FONTS.md)
+              flint-schema.liquid               (parity — already live)
+templates/    page.contact.json                 (parity — already live)
 ```
 
-The header and the /collections page are already live — I pushed those
-directly when I fixed the navigation, so they aren't in this batch.
+The four parity files are already live on the store; they are here so your
+GitHub repo stops drifting from what is actually running.
 
 ---
 
-## Already done in your store
+## The three fixes
 
-I created all of this while building, so the links resolve the moment you
-upload:
+**1. "Including VAT" removed from the product page.** You are not VAT
+registered, so claiming it was a misrepresentation. It is now a checkbox in
+the Product page section settings, off by default. Switch it on the day
+registration comes through — nothing else needs to change.
 
-**Pages** — About, Trade, Finish samples, Delivery, Returns, Guarantee,
-Installation, Contact. All written, all in Flint voice, all published.
+**2. Price-range filter inputs had no accessible label.** They had visible
+placeholders, which sighted users read fine and screen readers ignore. Both
+now carry an `aria-label`.
 
-**Journal** — the blog, plus the first three guides:
-How high should wall lights be? · Lighting a kitchen island ·
-Bathroom IP ratings, explained plainly.
-
-**Menus** — Footer Trade and Footer Journal, so those two columns fill in.
-
----
-
-## Two minutes in the customiser
-
-Three things I can't set from here, because they live in the theme's own
-settings rather than in your store's data:
-
-1. **Header → utility links.** Set the three URLs:
-   Trade → `/pages/trade` · Finish samples → `/pages/finish-samples` ·
-   About → `/pages/about`
-2. **Footer → Trade column → Menu** → choose *Footer Trade*.
-   **Footer → Journal column → Menu** → choose *Footer Journal*.
-3. **Product grid** on the homepage → choose *New this season*.
+**3. The contact form's topic select had no dropdown arrow.** I had set
+`appearance: none` to strip the browser default and never replaced it, so it
+looked like a text field. It now has a Knap chevron.
 
 ---
 
-## What to look at
+## Audit results
 
-- **The Journal.** `/blogs/journal` — three real guides. Open "How high should
-  wall lights be?" and note the standfirst answers the question in two
-  sentences, and the "In short" box near the top. That box is what gets
-  screenshotted and shared.
-- **The cart.** Add something. No upsells, no free-delivery progress bar, no
-  urgency. Its job is to get out of the way.
-- **Delivery and Returns.** Written to be read, not to be defensible. "If it is
-  not right, send it back within 30 days and we will refund it in full."
-- **404.** Try any nonsense URL. Quiet and useful — a wrong turn isn't an
-  occasion for a joke.
+Everything else passed:
+
+| Check | Result |
+|---|---|
+| Images have alt text | pass |
+| Buttons have accessible names | pass |
+| Focus styles present | pass |
+| Reduced motion honoured | pass |
+| Heading hierarchy, no level skips | pass |
+| Colour contrast, all pairings | pass (verified numerically) |
+| CSS split per template | pass — 42KB across 6 files |
+
+**Deliberately not done:** a `<link rel="preload">` for the hero image. It sits
+in the initial HTML with `fetchpriority="high"`, which the browser's preload
+scanner picks up immediately. Adding a preload would mean hard-coding an image
+path in the layout that goes stale the moment you change the hero. The real
+LCP win is the fonts.
 
 ---
 
-## After this batch
+## Next: the fonts
 
-Dawn's CSS now only loads on customer account pages and the password page.
-Everything else is Flint. The remaining Phase 1 work is not templates:
-
-- Commerce setup — payments, shipping, VAT, notification emails
-- SEO and analytics — structured data, GA4, Search Console, Merchant Center
-- Performance and accessibility audit — including self-hosting the fonts
-- Replacing every placeholder image with real photography
-- Replacing the invented sample specification data with verified supplier data
+See **FONTS.md**. Fifteen minutes, done once, worth about half a second.

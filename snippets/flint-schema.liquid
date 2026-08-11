@@ -1,6 +1,6 @@
 {%- comment -%}
-  FLINT - STRUCTURED DATA (section 23)
-  Product, Breadcrumb, WebSite JSON-LD. Rendered once from theme.liquid;
+  FLINT — STRUCTURED DATA (§23)
+  Product, Breadcrumb and Article JSON-LD. Rendered once from theme.liquid;
   it switches on the template itself.
 
   Product data comes from the flint.* metafields, so rich results stay in step
@@ -72,6 +72,10 @@
   </script>
 {%- endif -%}
 
+{%- comment -%}
+  A retailer's own site search is worth declaring — it lets Google show a
+  search box in the result for the brand name.
+{%- endcomment -%}
 {%- if template.name == 'index' -%}
   <script type="application/ld+json">
   {

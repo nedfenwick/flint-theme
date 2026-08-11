@@ -60,12 +60,14 @@
                     <input class="flint-field" type="number" inputmode="numeric"
                            name="{{ filter.min_value.param_name }}"
                            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                           placeholder="Min" min="0" style="height:40px;font-size:13px;">
+                           placeholder="Min" min="0" aria-label="{{ filter.label | escape }}, minimum"
+                           style="height:40px;font-size:13px;">
                     <span class="flint-small">to</span>
                     <input class="flint-field" type="number" inputmode="numeric"
                            name="{{ filter.max_value.param_name }}"
                            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                           placeholder="Max" min="0" style="height:40px;font-size:13px;">
+                           placeholder="Max" min="0" aria-label="{{ filter.label | escape }}, maximum"
+                           style="height:40px;font-size:13px;">
                   </div>
               {%- endcase -%}
             </div>

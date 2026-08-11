@@ -25,9 +25,9 @@
     {%- comment -%}
       FONTS
       Loaded from Google Fonts for now so the theme works immediately.
-      BEFORE LAUNCH: download Newsreader and Inter, subset to Latin plus
-      Latin-Extended, upload as theme assets and swap this for self-hosted
-      font-face rules. Target 140KB or less. Brand Manual section 14.
+      BEFORE LAUNCH: download Newsreader and Inter, subset to Latin + Latin-Ext
+      (keeping £ × · — ‘ ’ “ ”), upload as theme assets and swap this for
+      self-hosted @font-face. Target: ≤140KB total. Brand Manual §14.
     {%- endcomment -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,9 +37,10 @@
     >
 
     {%- comment -%}
-      Dawn's stylesheet loads on every template EXCEPT those rebuilt in the
-      Flint system. Scaffolding: as each template is replaced, remove it from
-      this list. When the list is empty, delete the line and Dawn's CSS.
+      Dawn's stylesheet is loaded on every template EXCEPT those we have
+      rebuilt in the Flint system. It is scaffolding: as each template is
+      replaced, remove it from this list. When the list is empty, delete
+      the line — and Dawn's CSS with it.
     {%- endcomment -%}
     {%- assign flint_templates = 'index,product,collection,list-collections,cart,search,page,blog,article,404' -%}
     {%- unless flint_templates contains template.name -%}
@@ -67,6 +68,7 @@
 
     {{ content_for_header }}
 
+    {%- comment -%} Organisation structured data — Brand Manual §23 {%- endcomment -%}
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
