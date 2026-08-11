@@ -1,0 +1,143 @@
+{%- comment -%}
+  FLINT - CONTACT (section 09 voice, section 23 layout)
+  Two columns: how to reach us, and a form. Response time stated once, at the
+  top, rather than buried. Emails are links, not text.
+{%- endcomment -%}
+
+<div class="flint-container">
+
+  <header class="flint-page__head">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="flint-label">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h1 class="h2" style="margin-top: var(--sp-2);">{{ page.title }}</h1>
+    {%- if section.settings.intro != blank -%}
+      <p class="flint-lede" style="margin-top: var(--sp-4);">{{ section.settings.intro }}</p>
+    {%- endif -%}
+  </header>
+
+  <div class="flint-contact">
+
+    <aside class="flint-contact__routes">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'route' -%}
+          <div class="flint-contact__route" {{ block.shopify_attributes }}>
+            <p class="flint-label">{{ block.settings.label }}</p>
+            {%- if block.settings.email != blank -%}
+              <p class="flint-contact__email">
+                <a href="mailto:{{ block.settings.email }}">{{ block.settings.email }}</a>
+              </p>
+            {%- endif -%}
+            {%- if block.settings.note != blank -%}
+              <p class="flint-small" style="margin: var(--sp-2) 0 0;">{{ block.settings.note }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if page.content != blank -%}
+        <div class="flint-contact__extra rte">{{ page.content }}</div>
+      {%- endif -%}
+    </aside>
+
+    <div class="flint-contact__form">
+      {%- form 'contact', id: 'flint-contact-form' -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class="flint-msg flint-msg--success" style="margin-bottom: var(--sp-5);">
+            Thank you. We have it, and we will come back to you within one working day.
+          </p>
+        {%- elsif form.errors -%}
+          <p class="flint-msg flint-msg--error" style="margin-bottom: var(--sp-5);">
+            {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+          </p>
+        {%- endif -%}
+
+        <div class="flint-field-group">
+          <label class="flint-label" for="contact-name">Name</label>
+          <input class="flint-field" id="contact-name" type="text" name="contact[name]"
+                 value="{{ form.name }}" autocomplete="name" required>
+        </div>
+
+        <div class="flint-field-group">
+          <label class="flint-label" for="contact-email">Email</label>
+          <input class="flint-field" id="contact-email" type="email" name="contact[email]"
+                 value="{{ form.email }}" autocomplete="email" required>
+        </div>
+
+        <div class="flint-field-group">
+          <label class="flint-label" for="contact-topic">What is it about?</label>
+          <select class="flint-field" id="contact-topic" name="contact[Topic]">
+            <option>An order</option>
+            <option>Choosing a fitting</option>
+            <option>Specification or installation</option>
+            <option>Trade</option>
+            <option>Something else</option>
+          </select>
+        </div>
+
+        <div class="flint-field-group">
+          <label class="flint-label" for="contact-body">Message</label>
+          <textarea class="flint-field flint-field--area" id="contact-body" name="contact[body]"
+                    rows="7" required>{{ form.body }}</textarea>
+          {%- if section.settings.helper != blank -%}
+            <p class="flint-small" style="margin: var(--sp-2) 0 0;">{{ section.settings.helper }}</p>
+          {%- endif -%}
+        </div>
+
+        <button class="flint-btn flint-btn--primary" type="submit">Send</button>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .flint-contact {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(32px, 5vw, 88px);
+    align-items: start;
+    padding-bottom: var(--section-pad);
+  }
+  @media (max-width: 899px) { .flint-contact { grid-template-columns: 1fr; gap: var(--sp-7); } }
+
+  .flint-contact__route { padding-block: var(--sp-4); border-bottom: var(--hairline) solid var(--border-default); }
+  .flint-contact__route:first-child { border-top: var(--hairline) solid var(--border-default); }
+  .flint-contact__email { font-family: var(--font-serif); font-size: var(--size-h4); margin: var(--sp-2) 0 0; }
+  .flint-contact__email a { color: var(--text-primary); text-decoration: none; border-bottom: var(--hairline) solid var(--border-default); }
+  .flint-contact__email a:hover { border-bottom-color: var(--accent-hairline); }
+  .flint-contact__extra { margin-top: var(--sp-6); }
+  .flint-contact__extra p { font-size: var(--size-small); color: var(--text-secondary); }
+
+  .flint-field-group { margin-bottom: var(--sp-4); }
+  .flint-field-group .flint-label { display: block; margin-bottom: var(--sp-2); }
+  .flint-field--area { height: auto; padding: var(--sp-3) var(--sp-4); line-height: 1.6; resize: vertical; }
+  select.flint-field { appearance: none; background-image: none; }
+  .flint-contact__form .flint-btn { margin-top: var(--sp-2); }
+  @media (max-width: 599px) { .flint-contact__form .flint-btn { width: 100%; } }
+</style>
+
+{% schema %}
+{
+  "name": "Contact",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Contact" },
+    { "type": "textarea", "id": "intro", "label": "Introduction",
+      "default": "A real person reads these. We answer within one working day, usually sooner." },
+    { "type": "text", "id": "helper", "label": "Message helper text",
+      "default": "If it is about an order, include the order number. If it is about choosing a fitting, tell us the room and the ceiling height." }
+  ],
+  "blocks": [
+    {
+      "type": "route",
+      "name": "Contact route",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "General" },
+        { "type": "text", "id": "email", "label": "Email address" },
+        { "type": "textarea", "id": "note", "label": "Note" }
+      ]
+    }
+  ]
+}
+{% endschema %}
