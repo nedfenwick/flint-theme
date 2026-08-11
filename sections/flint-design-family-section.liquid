@@ -1,0 +1,15 @@
+{%- comment -%}
+  FLINT — DESIGN FAMILY (§25)
+  Wraps the design-family snippet so it can be reordered in the theme editor.
+{%- endcomment -%}
+{% render 'flint-design-family', product: product %}
+
+{% schema %}
+{
+  "name": "Design family",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Shows other products sharing this product's Design family metafield. The highest-value module on the page for basket size." }
+  ]
+}
+{% endschema %}

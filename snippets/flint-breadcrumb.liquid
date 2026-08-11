@@ -1,0 +1,19 @@
+{%- comment -%}
+  FLINT — BREADCRUMB (§25)
+  Present on every category and product page. Genuinely useful in a deep
+  catalogue, and it drives BreadcrumbList structured data.
+{%- endcomment -%}
+
+<nav class="flint-caption" aria-label="Breadcrumb" style="padding-block: var(--sp-3);">
+  <a href="{{ routes.root_url }}" style="color: inherit; text-decoration: none;">Home</a>
+  {%- if product -%}
+    {%- assign col = product.collections | where: 'template_suffix', nil | first -%}
+    {%- if collection -%}{%- assign col = collection -%}{%- endif -%}
+    {%- if col -%}
+      &nbsp;/&nbsp;<a href="{{ col.url }}" style="color: inherit; text-decoration: none;">{{ col.title }}</a>
+    {%- endif -%}
+    &nbsp;/&nbsp;<span>{{ product.title }}</span>
+  {%- elsif collection -%}
+    &nbsp;/&nbsp;<span>{{ collection.title }}</span>
+  {%- endif -%}
+</nav>

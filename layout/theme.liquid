@@ -42,7 +42,7 @@
       replaced, remove it from this list. When the list is empty, delete
       the line — and Dawn's CSS with it.
     {%- endcomment -%}
-    {%- assign flint_templates = 'index' -%}
+    {%- assign flint_templates = 'index,product' -%}
     {%- unless flint_templates contains template.name -%}
       {{ 'base.css' | asset_url | stylesheet_tag }}
     {%- endunless -%}
@@ -50,6 +50,10 @@
     {{ 'flint-tokens.css' | asset_url | stylesheet_tag }}
     {{ 'flint-base.css' | asset_url | stylesheet_tag }}
     {{ 'flint-components.css' | asset_url | stylesheet_tag }}
+
+    {%- if template.name == 'product' -%}
+      {{ 'flint-product.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
 
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
 

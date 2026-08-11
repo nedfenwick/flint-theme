@@ -1,0 +1,124 @@
+/* ==========================================================================
+   FLINT — PRODUCT PAGE (Brand Manual §25)
+   Loaded on the product template only.
+   ========================================================================== */
+
+.flint-pdp { padding-block: var(--sp-5) var(--section-pad); }
+
+.flint-pdp__grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: clamp(24px, 3.5vw, 64px);
+  align-items: start;
+}
+@media (max-width: 899px) { .flint-pdp__grid { grid-template-columns: 1fr; gap: var(--sp-5); } }
+
+/* -- Gallery: sticky on desktop, swipe on mobile ------------------------- */
+.flint-pdp__gallery { position: sticky; top: var(--sp-5); }
+@media (max-width: 899px) {
+  .flint-pdp__gallery { position: static; margin-inline: calc(var(--container-pad) * -1); }
+}
+
+.flint-gallery__main { background: var(--surface-raised); }
+.flint-gallery__thumbs {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+.flint-gallery__thumb {
+  padding: 0; border: var(--hairline) solid transparent; background: var(--surface-raised);
+  cursor: pointer; aspect-ratio: var(--ratio-product); overflow: hidden;
+}
+.flint-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.flint-gallery__thumb[aria-current="true"] { border-color: var(--border-strong); }
+@media (max-width: 899px) {
+  .flint-gallery__thumbs { display: none; }
+  .flint-gallery__scroller {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .flint-gallery__scroller::-webkit-scrollbar { display: none; }
+  .flint-gallery__scroller > * { flex: 0 0 100%; scroll-snap-align: start; }
+  .flint-gallery__dots { display: flex; gap: 6px; justify-content: center; padding-top: var(--sp-3); }
+  .flint-gallery__dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border-default); }
+  .flint-gallery__dot[aria-current="true"] { background: var(--text-primary); }
+}
+
+/* -- Detail column -------------------------------------------------------- */
+.flint-pdp__title { margin: var(--sp-2) 0; }
+.flint-pdp__intro {
+  font-family: var(--font-serif); font-weight: var(--weight-light);
+  font-size: 17px; line-height: 1.65; margin: var(--sp-4) 0 var(--sp-5);
+}
+
+/* -- Finish swatches ------------------------------------------------------ */
+.flint-swatches { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-5); }
+.flint-swatch {
+  width: var(--swatch); height: var(--swatch);
+  border: var(--hairline) solid var(--border-default);
+  padding: 0; cursor: pointer; position: relative;
+  background-size: cover; background-position: center;
+}
+.flint-swatch input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.flint-swatch:has(input:checked) { outline: 2px solid var(--border-strong); outline-offset: 2px; border-color: transparent; }
+.flint-swatch:has(input:focus-visible) { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+/* Finish swatches must become cropped photographs of the real metal (§25).
+   These gradients are a stand-in until finish photography exists. */
+.flint-swatch--aged-brass  { background-image: linear-gradient(140deg, #C9A96B, #8A6E40 60%, #6A5230); }
+.flint-swatch--bronze      { background-image: linear-gradient(140deg, #7E6A55, #4A3B2C 60%, #33281C); }
+.flint-swatch--warm-nickel { background-image: linear-gradient(140deg, #D5D0C6, #9A9389 60%, #7A736A); }
+.flint-swatch--black       { background-image: linear-gradient(140deg, #403C37, #1C1A17 60%, #131110); }
+.flint-swatch--soft-ivory  { background-image: linear-gradient(140deg, #F4EFE3, #DED5C2 60%, #C3B9A4); }
+
+/* -- Buy area ------------------------------------------------------------- */
+.flint-pdp__buy .flint-btn { width: 100%; margin-bottom: var(--sp-2); }
+.flint-service {
+  border-top: var(--hairline) solid var(--border-default);
+  padding-top: var(--sp-4); margin: var(--sp-5) 0;
+  font-size: var(--size-small); color: var(--text-secondary);
+}
+.flint-service__row { display: flex; justify-content: space-between; gap: var(--sp-4); padding-block: 3px; }
+.flint-service__row strong { color: var(--text-primary); font-weight: var(--weight-regular); }
+
+/* -- Good to know: the most important block on the page ------------------- */
+.flint-gtk { background: var(--surface-band); padding: var(--card-pad); margin-bottom: var(--sp-5); }
+.flint-gtk h2 { margin-bottom: var(--sp-3); }
+.flint-gtk p { font-size: var(--size-small); line-height: 1.7; margin-bottom: var(--sp-3); max-width: none; }
+.flint-gtk p:last-child { margin-bottom: 0; }
+
+/* -- Specification accordions --------------------------------------------- */
+.flint-acc { border-top: var(--hairline) solid var(--border-default); }
+.flint-acc details { border-bottom: var(--hairline) solid var(--border-default); }
+.flint-acc summary {
+  display: flex; justify-content: space-between; align-items: center; gap: var(--sp-4);
+  padding-block: var(--sp-3); cursor: pointer; list-style: none;
+  font-family: var(--font-serif); font-size: var(--size-h4); font-weight: var(--weight-regular);
+  min-height: var(--tap-min);
+}
+.flint-acc summary::-webkit-details-marker { display: none; }
+.flint-acc summary::after { content: '+'; font-family: var(--font-sans); font-size: 16px; color: var(--text-secondary); }
+.flint-acc details[open] summary::after { content: '\2212'; }
+.flint-acc__body { padding-bottom: var(--sp-4); }
+.flint-spec-row {
+  display: flex; justify-content: space-between; gap: var(--sp-4);
+  padding-block: var(--sp-2);
+  border-bottom: var(--hairline) solid var(--border-default);
+  font-size: var(--size-spec); font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+.flint-spec-row:last-child { border-bottom: 0; }
+.flint-spec-row > span:last-child { color: var(--text-primary); text-align: right; }
+
+/* -- Mobile sticky buy bar ------------------------------------------------ */
+.flint-buybar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  display: none; align-items: center; gap: var(--sp-3);
+  background: var(--surface-raised);
+  border-top: var(--hairline) solid var(--border-default);
+  padding: var(--sp-2) var(--container-pad);
+  padding-bottom: calc(var(--sp-2) + env(safe-area-inset-bottom));
+}
+.flint-buybar .flint-btn { flex: 1; min-height: 44px; }
+.flint-buybar__price { flex: 0 0 auto; line-height: 1.2; }
+@media (max-width: 899px) { .flint-buybar.is-visible { display: flex; } }

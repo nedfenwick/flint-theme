@@ -1,0 +1,331 @@
+{%- comment -%}
+  FLINT — PRODUCT PAGE (Brand Manual §25)
+
+  Lighting is confusing, and almost every retailer makes it worse. This page
+  is meant to be the clearest in the category — that is a competitive
+  advantage, not a content exercise.
+
+  Everything technical reads from the flint.* metafields, so adding a product
+  is form-filling rather than judgement.
+{%- endcomment -%}
+
+{%- liquid
+  assign mf = product.metafields.flint
+  assign v = product.selected_or_first_available_variant
+  assign finish = v.metafields.flint.finish_name.value
+  assign has_gtk = false
+  if mf.gtk_where.value != blank or mf.gtk_light.value != blank or mf.gtk_wet.value != blank or mf.gtk_dimming.value != blank
+    assign has_gtk = true
+  endif
+-%}
+
+<div class="flint-container flint-pdp">
+
+  {% render 'flint-breadcrumb', product: product %}
+
+  <div class="flint-pdp__grid">
+
+    {%- comment -%} ── GALLERY ─────────────────────────────────────────── {%- endcomment -%}
+    <div class="flint-pdp__gallery">
+      {%- if product.media.size > 0 -%}
+        <div class="flint-gallery__main flint-media flint-media--product" data-flint-gallery-main>
+          {{ product.featured_media | image_url: width: 2400
+             | image_tag: loading: 'eager', fetchpriority: 'high',
+               sizes: '(max-width: 899px) 100vw, 55vw',
+               widths: '600,900,1200,1600,2000,2400',
+               alt: product.featured_media.alt | default: product.title }}
+        </div>
+        {%- if product.media.size > 1 -%}
+          <div class="flint-gallery__thumbs">
+            {%- for media in product.media limit: 8 -%}
+              <button class="flint-gallery__thumb"
+                      type="button"
+                      aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                      aria-label="View image {{ forloop.index }}"
+                      data-flint-thumb
+                      data-src="{{ media | image_url: width: 2400 }}">
+                {{ media | image_url: width: 300 | image_tag: loading: 'lazy', alt: '' }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="flint-media flint-media--product">
+          <img src="{{ 'flint-ph-product-alden-wall-light.webp' | asset_url }}" alt="{{ product.title | escape }}">
+        </div>
+        {%- if request.design_mode -%}
+          <p class="flint-small" style="margin-top: var(--sp-3);">
+            No product images yet. Gallery slot 01 must be a real photograph of the real
+            product on a plaster ground — never a white cut-out. (§21)
+          </p>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── DETAIL ──────────────────────────────────────────── {%- endcomment -%}
+    <div class="flint-pdp__detail">
+
+      {%- if product.type != blank -%}
+        <p class="flint-label">{{ product.type }}</p>
+      {%- endif -%}
+
+      <h1 class="flint-pdp__title h2">{{ product.title }}</h1>
+
+      <p class="flint-price" data-flint-price>{{ v.price | money_without_trailing_zeros }}</p>
+      <p class="flint-caption" style="margin-top: var(--sp-1);">
+        Including VAT.{% if section.settings.delivery_note != blank %} {{ section.settings.delivery_note }}{% endif %}
+      </p>
+
+      {%- if product.description != blank -%}
+        <div class="flint-pdp__intro">{{ product.description }}</div>
+      {%- endif -%}
+
+      <hr class="flint-rule">
+
+      {%- comment -%} ── FINISH SELECTOR ───────────────────────────────── {%- endcomment -%}
+      {%- if product.has_only_default_variant == false -%}
+        {%- for option in product.options_with_values -%}
+          <p class="flint-label" style="margin: var(--sp-5) 0 var(--sp-3);">
+            {{ option.name }} — <span data-flint-optname>{{ option.selected_value }}</span>
+          </p>
+          <div class="flint-swatches" role="radiogroup" aria-label="{{ option.name | escape }}">
+            {%- for value in option.values -%}
+              {%- assign slug = value | handleize -%}
+              <label class="flint-swatch flint-swatch--{{ slug }}" title="{{ value | escape }}">
+                <input type="radio"
+                       name="flint-option-{{ option.position }}"
+                       value="{{ value | escape }}"
+                       data-flint-option="{{ option.position }}"
+                       {% if option.selected_value == value %}checked{% endif %}>
+                <span class="visually-hidden">{{ value }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- comment -%} ── BUY ───────────────────────────────────────────── {%- endcomment -%}
+      <div class="flint-pdp__buy">
+        {%- form 'product', product, id: 'flint-product-form' -%}
+          <input type="hidden" name="id" value="{{ v.id }}" data-flint-variant-id>
+          <button class="flint-btn flint-btn--primary" type="submit"
+                  {% unless v.available %}disabled{% endunless %} data-flint-add>
+            {% if v.available %}Add to basket{% else %}Out of stock{% endif %}
+          </button>
+        {%- endform -%}
+
+        {%- if section.settings.sample_url != blank -%}
+          <a class="flint-btn flint-btn--secondary" href="{{ section.settings.sample_url }}">
+            Order a finish sample — free
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ── SERVICE ───────────────────────────────────────── {%- endcomment -%}
+      <div class="flint-service">
+        <div class="flint-service__row">
+          <span>{% if v.available %}In stock{% else %}Out of stock{% endif %}</span>
+          <strong>{{ section.settings.despatch }}</strong>
+        </div>
+        <div class="flint-service__row"><span>Returns</span><strong>{{ section.settings.returns }}</strong></div>
+        <div class="flint-service__row"><span>Guarantee</span><strong>{{ section.settings.guarantee }}</strong></div>
+      </div>
+
+      {%- comment -%} ── GOOD TO KNOW ──────────────────────────────────── {%- endcomment -%}
+      {%- if has_gtk -%}
+        <div class="flint-gtk">
+          <h2 class="h4">Good to know</h2>
+          {%- if mf.gtk_where.value != blank -%}
+            <p><strong>Where it works.</strong> {{ mf.gtk_where.value }}</p>
+          {%- endif -%}
+          {%- if mf.gtk_light.value != blank -%}
+            <p><strong>How much light.</strong> {{ mf.gtk_light.value }}</p>
+          {%- endif -%}
+          {%- if mf.gtk_wet.value != blank -%}
+            <p><strong>Bathrooms and outdoors.</strong> {{ mf.gtk_wet.value }}</p>
+          {%- endif -%}
+          {%- if mf.gtk_dimming.value != blank -%}
+            <p><strong>Dimming.</strong> {{ mf.gtk_dimming.value }}</p>
+          {%- endif -%}
+          {%- if mf.gtk_extra.value != blank -%}
+            <p><strong>{{ mf.gtk_extra_label.value | default: 'Also worth knowing' }}.</strong> {{ mf.gtk_extra.value }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} ── SPECIFICATION ─────────────────────────────────── {%- endcomment -%}
+      <div class="flint-acc">
+
+        <details open>
+          <summary>Dimensions &amp; materials</summary>
+          <div class="flint-acc__body">
+            {%- if mf.height_mm.value -%}<div class="flint-spec-row"><span>Height</span><span>{{ mf.height_mm.value }} mm</span></div>{%- endif -%}
+            {%- if mf.width_mm.value -%}<div class="flint-spec-row"><span>Width</span><span>{{ mf.width_mm.value }} mm</span></div>{%- endif -%}
+            {%- if mf.diameter_mm.value -%}<div class="flint-spec-row"><span>Diameter</span><span>{{ mf.diameter_mm.value }} mm</span></div>{%- endif -%}
+            {%- if mf.projection_mm.value -%}<div class="flint-spec-row"><span>Projection</span><span>{{ mf.projection_mm.value }} mm</span></div>{%- endif -%}
+            {%- if mf.drop_min_mm.value -%}<div class="flint-spec-row"><span>Adjustable drop</span><span>{{ mf.drop_min_mm.value }}–{{ mf.drop_max_mm.value }} mm</span></div>{%- endif -%}
+            {%- if mf.backplate.value != blank -%}<div class="flint-spec-row"><span>Backplate</span><span>{{ mf.backplate.value }}</span></div>{%- endif -%}
+            {%- if mf.materials.value -%}<div class="flint-spec-row"><span>Materials</span><span>{{ mf.materials.value | join: ', ' }}</span></div>{%- endif -%}
+            {%- if mf.weight_kg.value -%}<div class="flint-spec-row"><span>Weight</span><span>{{ mf.weight_kg.value }} kg</span></div>{%- endif -%}
+          </div>
+        </details>
+
+        <details>
+          <summary>Bulb, wattage &amp; dimming</summary>
+          <div class="flint-acc__body">
+            {%- if mf.lamp_cap.value != blank -%}<div class="flint-spec-row"><span>Lamp</span><span>{{ mf.lamp_count.value | default: 1 }} × {{ mf.lamp_cap.value }}</span></div>{%- endif -%}
+            {%- if mf.max_wattage.value -%}<div class="flint-spec-row"><span>Maximum wattage</span><span>{{ mf.max_wattage.value }} W</span></div>{%- endif -%}
+            <div class="flint-spec-row"><span>Bulb included</span><span>{% if mf.bulb_included.value %}Yes{% else %}No{% endif %}</span></div>
+            <div class="flint-spec-row"><span>Dimmable</span><span>{% if mf.dimmable.value %}Yes{% else %}No{% endif %}</span></div>
+            {%- if mf.dimmer_type.value != blank -%}<div class="flint-spec-row"><span>Dimmer type</span><span>{{ mf.dimmer_type.value }}</span></div>{%- endif -%}
+            {%- if mf.recommended_bulbs.value -%}<div class="flint-spec-row"><span>Bulbs we have tested</span><span>{{ mf.recommended_bulbs.value | join: ', ' }}</span></div>{%- endif -%}
+          </div>
+        </details>
+
+        <details>
+          <summary>Installation &amp; fixing</summary>
+          <div class="flint-acc__body">
+            {%- if mf.fixing_centres_mm.value -%}<div class="flint-spec-row"><span>Fixing centres</span><span>{{ mf.fixing_centres_mm.value }} mm</span></div>{%- endif -%}
+            {%- if mf.electrical_class.value != blank -%}<div class="flint-spec-row"><span>Electrical class</span><span>{{ mf.electrical_class.value }}</span></div>{%- endif -%}
+            <p class="flint-small" style="margin-top: var(--sp-3);">{{ section.settings.install_note }}</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Room suitability &amp; IP rating</summary>
+          <div class="flint-acc__body">
+            {%- if mf.ip_rating.value != blank -%}<div class="flint-spec-row"><span>IP rating</span><span>{{ mf.ip_rating.value }}</span></div>{%- endif -%}
+            {%- if mf.bathroom_zones.value -%}<div class="flint-spec-row"><span>Permitted bathroom zones</span><span>{{ mf.bathroom_zones.value | join: ', ' }}</span></div>{%- endif -%}
+            {%- if mf.room_suitability.value -%}<div class="flint-spec-row"><span>Suits</span><span>{{ mf.room_suitability.value | join: ', ' }}</span></div>{%- endif -%}
+            <p class="flint-small" style="margin-top: var(--sp-3);">
+              A qualified electrician should confirm the zoning for your room. Bathroom
+              zones are defined in BS 7671.
+            </p>
+          </div>
+        </details>
+
+        {%- assign has_dl = false -%}
+        {%- if mf.spec_sheet.value or mf.line_drawing.value or mf.install_guide.value -%}{%- assign has_dl = true -%}{%- endif -%}
+        <details>
+          <summary>Downloads</summary>
+          <div class="flint-acc__body">
+            {%- if has_dl -%}
+              {%- if mf.spec_sheet.value -%}<p><a class="flint-link" href="{{ mf.spec_sheet.value.url }}">Specification sheet (PDF)</a></p>{%- endif -%}
+              {%- if mf.line_drawing.value -%}<p><a class="flint-link" href="{{ mf.line_drawing.value.url }}">Dimensioned drawing (PDF)</a></p>{%- endif -%}
+              {%- if mf.install_guide.value -%}<p><a class="flint-link" href="{{ mf.install_guide.value.url }}">Installation instructions (PDF)</a></p>{%- endif -%}
+            {%- else -%}
+              <p class="flint-small">Specification sheets and dimensioned drawings are added as each product is photographed and drawn.</p>
+            {%- endif -%}
+          </div>
+        </details>
+
+        <details>
+          <summary>Delivery &amp; returns</summary>
+          <div class="flint-acc__body">
+            <p class="flint-small">{{ section.settings.delivery_detail }}</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ── MOBILE STICKY BUY BAR (§26) ─────────────────────────── {%- endcomment -%}
+<div class="flint-buybar" data-flint-buybar>
+  <div class="flint-buybar__price">
+    <div class="flint-price flint-price--card" data-flint-price>{{ v.price | money_without_trailing_zeros }}</div>
+    <div class="flint-caption" data-flint-optname>{{ finish | default: v.title }}</div>
+  </div>
+  <button class="flint-btn flint-btn--primary" type="submit" form="flint-product-form">Add to basket</button>
+</div>
+
+<script type="application/json" data-flint-variants>
+  {{ product.variants | json }}
+</script>
+
+<script>
+  (function () {
+    var root = document.currentScript.parentNode;
+    var data = document.querySelector('[data-flint-variants]');
+    if (!data) return;
+    var variants = JSON.parse(data.textContent);
+
+    function money(pence) {
+      var n = pence / 100;
+      return '£' + (n % 1 === 0 ? n.toFixed(0) : n.toFixed(2));
+    }
+
+    function selected() {
+      var opts = [];
+      document.querySelectorAll('[data-flint-option]').forEach(function (input) {
+        if (input.checked) opts[parseInt(input.dataset.flintOption, 10) - 1] = input.value;
+      });
+      return opts;
+    }
+
+    function update() {
+      var opts = selected();
+      var match = variants.find(function (variant) {
+        return variant.options.every(function (o, i) { return !opts[i] || o === opts[i]; });
+      });
+      if (!match) return;
+
+      document.querySelectorAll('[data-flint-variant-id]').forEach(function (el) { el.value = match.id; });
+      document.querySelectorAll('[data-flint-price]').forEach(function (el) { el.textContent = money(match.price); });
+      document.querySelectorAll('[data-flint-optname]').forEach(function (el) { el.textContent = match.title; });
+      document.querySelectorAll('[data-flint-add]').forEach(function (el) {
+        el.disabled = !match.available;
+        el.textContent = match.available ? 'Add to basket' : 'Out of stock';
+      });
+
+      var url = new URL(window.location.href);
+      url.searchParams.set('variant', match.id);
+      window.history.replaceState({}, '', url);
+    }
+
+    document.querySelectorAll('[data-flint-option]').forEach(function (input) {
+      input.addEventListener('change', update);
+    });
+
+    /* Gallery: thumbnails swap the main image. */
+    var main = document.querySelector('[data-flint-gallery-main] img');
+    document.querySelectorAll('[data-flint-thumb]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!main) return;
+        main.src = btn.dataset.src;
+        main.removeAttribute('srcset');
+        document.querySelectorAll('[data-flint-thumb]').forEach(function (b) {
+          b.setAttribute('aria-current', b === btn ? 'true' : 'false');
+        });
+      });
+    });
+
+    /* Buy bar appears once the gallery has scrolled away. */
+    var gallery = document.querySelector('.flint-pdp__gallery');
+    var bar = document.querySelector('[data-flint-buybar]');
+    if (gallery && bar && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        bar.classList.toggle('is-visible', !entries[0].isIntersecting);
+      }, { rootMargin: '-120px 0px 0px 0px' }).observe(gallery);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product page",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "delivery_note", "label": "Price note", "default": "Free UK delivery over £75." },
+    { "type": "text", "id": "despatch", "label": "Despatch", "default": "Despatched within 2 working days" },
+    { "type": "text", "id": "returns", "label": "Returns", "default": "30 days" },
+    { "type": "text", "id": "guarantee", "label": "Guarantee", "default": "2 years" },
+    { "type": "url", "id": "sample_url", "label": "Finish sample link" },
+    { "type": "textarea", "id": "install_note", "label": "Installation note",
+      "default": "Fitting should be carried out by a qualified electrician. Fixings and instructions are supplied." },
+    { "type": "textarea", "id": "delivery_detail", "label": "Delivery & returns detail",
+      "default": "Free UK delivery on orders over £75, otherwise £4.95. Despatched within two working days. If it is not right, send it back within 30 days and we will refund it." }
+  ]
+}
+{% endschema %}

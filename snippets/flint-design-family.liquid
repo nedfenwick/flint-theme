@@ -1,0 +1,36 @@
+{%- comment -%}
+  FLINT — DESIGN FAMILY (§25)
+  "Coordinate the rest of the room." The single most valuable module on the
+  product page for basket value, because it maps to how renovators actually
+  buy — one name, several formats.
+
+  Usage: {% render 'flint-design-family', product: product %}
+{%- endcomment -%}
+
+{%- liquid
+  assign family = product.metafields.flint.design_family.value
+  assign siblings = 0
+-%}
+
+{%- if family != blank -%}
+  {%- capture family_items -%}
+    {%- for p in collections.all.products -%}
+      {%- if p.metafields.flint.design_family.value == family and p.id != product.id -%}
+        <div>{% render 'flint-product-card', product: p, sizes: '(max-width: 767px) 50vw, 22vw' %}</div>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if family_items != blank -%}
+    <section class="flint-section flint-section--band">
+      <div class="flint-container">
+        <p class="flint-label flint-label--accent" style="margin-bottom: var(--sp-5);">
+          The {{ family }} family — coordinate the rest of the room
+        </p>
+        <div class="flint-tiles" style="--cols: 4; --cols-md: 2; --cols-sm: 2;">
+          {{ family_items }}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
