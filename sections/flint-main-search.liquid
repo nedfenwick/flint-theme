@@ -1,0 +1,62 @@
+{%- comment -%}
+  FLINT — SEARCH (§23)
+{%- endcomment -%}
+
+<div class="flint-container" style="padding-block: var(--sp-6) var(--section-pad);">
+  <h1 class="h2">Search</h1>
+
+  <form class="flint-search__form" action="{{ routes.search_url }}" method="get" role="search" style="margin-top: var(--sp-5);">
+    <label class="visually-hidden" for="flint-search-input">Search</label>
+    <input class="flint-field" id="flint-search-input" type="search" name="q"
+           value="{{ search.terms | escape }}" placeholder="Wall lights, aged brass, IP44…" autocomplete="off">
+    <input type="hidden" name="options[prefix]" value="last">
+    <button class="flint-btn flint-btn--primary" type="submit">Search</button>
+  </form>
+
+  {%- if search.performed -%}
+    <p class="flint-coll__count" style="margin-bottom: var(--grid-row-gap);">
+      {{ search.results_count }}
+      {%- if search.results_count == 1 %} result{% else %} results{% endif %}
+      {%- if search.terms != blank %} for &ldquo;{{ search.terms }}&rdquo;{% endif -%}
+    </p>
+
+    {%- if search.results_count > 0 -%}
+      {%- paginate search.results by 24 -%}
+        <div class="flint-tiles" style="--cols: 4; --cols-md: 3; --cols-sm: 2;">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'flint-product-card', product: item, sizes: '(max-width: 767px) 50vw, 22vw' %}
+            {%- else -%}
+              <a class="flint-tile" href="{{ item.url }}">
+                <p class="flint-label">{{ item.object_type }}</p>
+                <h2 class="flint-tile__title" style="margin-top: var(--sp-2);">{{ item.title }}</h2>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="flint-pagination" aria-label="Pagination">
+            {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+              {%- else -%}<span {% if part.title == paginate.current_page %}aria-current="page"{% endif %}>{{ part.title }}</span>{%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}<a href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div style="padding-block: var(--sp-7); max-width: 52ch;">
+        <p class="flint-lede">Nothing found.</p>
+        <p class="flint-small" style="margin-top: var(--sp-3);">
+          Try a category — wall lights, pendants, picture lights — or a finish, like aged brass.
+        </p>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Search", "tag": "section", "settings": [] }
+{% endschema %}

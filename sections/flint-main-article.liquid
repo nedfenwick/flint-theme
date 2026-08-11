@@ -1,0 +1,84 @@
+{%- comment -%}
+  FLINT — JOURNAL ARTICLE (§32)
+  The standfirst answers the question in the first two sentences. Never a
+  teaser. No author byline — articles are published as Flint. Updated date
+  rather than publish date, because guides are maintained, not archived.
+{%- endcomment -%}
+
+<article class="flint-article">
+
+  {%- if article.image -%}
+    <div class="flint-article__hero flint-media flint-media--room" style="--ratio: 3/2;">
+      {{ article.image | image_url: width: 2400 | image_tag:
+         loading: 'eager', fetchpriority: 'high', sizes: '100vw',
+         widths: '750,1100,1500,1900,2400', alt: article.image.alt | default: article.title }}
+    </div>
+  {%- endif -%}
+
+  <div class="flint-container">
+    <div class="flint-article__inner">
+
+      {%- if article.tags.size > 0 -%}
+        <p class="flint-label flint-label--accent">{{ article.tags.first }}</p>
+      {%- endif -%}
+
+      <h1 class="h1" style="margin-top: var(--sp-3);">{{ article.title }}</h1>
+
+      {%- if article.excerpt != blank -%}
+        <div class="flint-article__standfirst">{{ article.excerpt }}</div>
+      {%- endif -%}
+
+      <hr class="flint-rule">
+
+      <div class="flint-article__body rte" style="padding-top: var(--sp-5);">
+        {{ article.content }}
+      </div>
+
+      {%- comment -%} One or two products mentioned in the guide. Never mid-article. {%- endcomment -%}
+      {%- assign handle = article.metafields.flint.product.value | default: section.settings.product_handle -%}
+      {%- assign featured = all_products[handle] -%}
+      {%- if featured != empty and featured.title != blank -%}
+        <div class="flint-article__product">
+          <a class="flint-media flint-media--product" href="{{ featured.url }}" style="width:108px;">
+            {%- if featured.featured_media -%}
+              {{ featured.featured_media | image_url: width: 300 | image_tag: loading: 'lazy', alt: featured.title }}
+            {%- endif -%}
+          </a>
+          <div>
+            <p class="flint-label">Mentioned in this guide</p>
+            <h2 class="flint-tile__title" style="margin: var(--sp-2) 0 var(--sp-1);">
+              <a href="{{ featured.url }}" style="color:inherit;text-decoration:none;">{{ featured.title }}</a>
+            </h2>
+            <p class="flint-price flint-price--card">{{ featured.price | money_without_trailing_zeros }}</p>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <p class="flint-caption" style="margin-top: var(--sp-6);">
+        Updated {{ article.updated_at | default: article.published_at | date: '%B %Y' }}
+      </p>
+    </div>
+  </div>
+</article>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": {{ article.title | json }},
+    "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }},
+    "dateModified": {{ article.updated_at | default: article.published_at | date: '%Y-%m-%d' | json }},
+    "publisher": { "@type": "Organization", "name": {{ shop.name | json }} }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "product_handle", "label": "Fallback product handle",
+      "info": "Used when the article has no Related product metafield set." }
+  ]
+}
+{% endschema %}

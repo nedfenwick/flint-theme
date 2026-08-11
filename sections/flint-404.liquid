@@ -1,0 +1,20 @@
+{%- comment -%}
+  FLINT — 404
+  Quiet and useful. A wrong turn is not an occasion for a joke.
+{%- endcomment -%}
+
+<div class="flint-container flint-404">
+  <h1 class="h2">That page has moved, or never existed.</h1>
+  <p class="flint-small" style="margin-top: var(--sp-4);">
+    Nothing is broken at your end. Try one of these instead.
+  </p>
+  <div style="display: flex; gap: var(--sp-3); flex-wrap: wrap; margin-top: var(--sp-5);">
+    <a class="flint-btn flint-btn--primary" href="{{ routes.root_url }}">Home</a>
+    <a class="flint-btn flint-btn--secondary" href="{{ routes.collections_url }}">All lighting</a>
+    <a class="flint-btn flint-btn--secondary" href="{{ routes.search_url }}">Search</a>
+  </div>
+</div>
+
+{% schema %}
+{ "name": "404", "tag": "section", "settings": [] }
+{% endschema %}

@@ -1,73 +1,82 @@
-# Flint theme — batch 3: the collection page
+# Flint theme — batch 4: everything that was left
 
-Four files.
+Thirteen files. This completes the storefront: cart, search, content pages,
+the Journal, and 404.
 
 ---
 
 ## Upload
 
 `flint-theme` repo → **Add file → Upload files** → drag these four folders in
-→ commit. Then tell me and I'll verify before you look.
+→ commit. Then tell me and I'll verify.
 
 ```
-assets/       flint-collection.css
-layout/       theme.liquid           (replaces batch 2's)
-sections/     flint-main-collection.liquid
-templates/    collection.json
+assets/       flint-pages.css
+layout/       theme.liquid                (replaces batch 3's)
+sections/     flint-main-cart.liquid, flint-main-search.liquid,
+              flint-main-page.liquid, flint-main-blog.liquid,
+              flint-main-article.liquid, flint-404.liquid
+templates/    cart.json, search.json, page.json,
+              blog.json, article.json, 404.json
 ```
+
+The header and the /collections page are already live — I pushed those
+directly when I fixed the navigation, so they aren't in this batch.
 
 ---
 
-## Then: turn the filters on
+## Already done in your store
 
-The filters are Shopify's native storefront filtering, which needs one free
-first-party app to configure. Without it the rail is empty — the page still
-works, it just has nothing to filter by.
+I created all of this while building, so the links resolve the moment you
+upload:
 
-1. Install **Search & Discovery** (Shopify, free) from the App Store.
-2. Open it → **Filters** → **Add filter**.
-3. Add these, in this order:
+**Pages** — About, Trade, Finish samples, Delivery, Returns, Guarantee,
+Installation, Contact. All written, all in Flint voice, all published.
 
-   | Filter | Source | Why |
-   |---|---|---|
-   | Finish | Product option: Finish | How people coordinate a house |
-   | Price | Price | Expected |
-   | Room | Metafield: `flint.room_suitability` | Matches how renovators think |
-   | Material | Metafield: `flint.materials` | Opal, ribbed, ceramic, linen |
-   | IP rating | Metafield: `flint.ip_rating` | **Nobody in the mid-market offers this** |
-   | Dimmable | Metafield: `flint.dimmable` | Solves a real post-purchase regret |
-   | Bulb included | Metafield: `flint.bulb_included` | Removes a common surprise |
-   | Width | Metafield: `flint.width_mm` | The one that matters for fitting |
-   | Drop | Metafield: `flint.drop_max_mm` | Low ceilings, constantly asked |
+**Journal** — the blog, plus the first three guides:
+How high should wall lights be? · Lighting a kitchen island ·
+Bathroom IP ratings, explained plainly.
 
-The last four are the point. Filtering by IP rating, dimmability, width and
-drop is the difference between a catalogue and something genuinely useful —
-and it costs nothing but the setup, because the data is already in the
-metafields.
+**Menus** — Footer Trade and Footer Journal, so those two columns fill in.
+
+---
+
+## Two minutes in the customiser
+
+Three things I can't set from here, because they live in the theme's own
+settings rather than in your store's data:
+
+1. **Header → utility links.** Set the three URLs:
+   Trade → `/pages/trade` · Finish samples → `/pages/finish-samples` ·
+   About → `/pages/about`
+2. **Footer → Trade column → Menu** → choose *Footer Trade*.
+   **Footer → Journal column → Menu** → choose *Footer Journal*.
+3. **Product grid** on the homepage → choose *New this season*.
 
 ---
 
 ## What to look at
 
-Open **Wall Lights** in the preview. With one product in it the grid is
-sparse, which is expected.
-
-- **The intro** reads from the collection's Category introduction metafield,
-  falling back to its description. Useful, not promotional.
-- **The editorial break** sits after product 12 by default, so with four
-  products you won't see it. Drop "Insert after N products" to 4 in the
-  customiser if you want to check it renders.
-- **Narrow the window** — the filter rail becomes a full-screen drawer with a
-  sticky Apply button.
-- **Sort defaults to the collection's own order**, not best-selling. These are
-  merchandised, not automated.
-- **Pagination, not infinite scroll** — 24 per page. Infinite scroll destroys
-  the footer and makes an edited range feel endless.
+- **The Journal.** `/blogs/journal` — three real guides. Open "How high should
+  wall lights be?" and note the standfirst answers the question in two
+  sentences, and the "In short" box near the top. That box is what gets
+  screenshotted and shared.
+- **The cart.** Add something. No upsells, no free-delivery progress bar, no
+  urgency. Its job is to get out of the way.
+- **Delivery and Returns.** Written to be read, not to be defensible. "If it is
+  not right, send it back within 30 days and we will refund it in full."
+- **404.** Try any nonsense URL. Quiet and useful — a wrong turn isn't an
+  occasion for a joke.
 
 ---
 
-## Still deliberately absent
+## After this batch
 
-No "quick add" on the cards. No star ratings. No sale badges. No "X left in
-stock". If the grid feels quiet compared with competitors, that is the
-intended difference, not an omission.
+Dawn's CSS now only loads on customer account pages and the password page.
+Everything else is Flint. The remaining Phase 1 work is not templates:
+
+- Commerce setup — payments, shipping, VAT, notification emails
+- SEO and analytics — structured data, GA4, Search Console, Merchant Center
+- Performance and accessibility audit — including self-hosting the fonts
+- Replacing every placeholder image with real photography
+- Replacing the invented sample specification data with verified supplier data

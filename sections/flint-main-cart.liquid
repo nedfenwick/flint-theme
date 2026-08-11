@@ -1,0 +1,108 @@
+{%- comment -%}
+  FLINT — CART (§23)
+  One cross-sell only: matching finishes from the same design family.
+  No upsells, no "you might also like", no urgency, no progress bar to free
+  delivery.
+{%- endcomment -%}
+
+<div class="flint-container flint-cart">
+  <h1 class="h2">Basket</h1>
+
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <div class="flint-cart__layout">
+        <div>
+          {%- for item in cart.items -%}
+            <div class="flint-cart__item">
+              <a href="{{ item.url }}" class="flint-media flint-media--product" style="width:96px;">
+                {%- if item.image -%}
+                  {{ item.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: item.title }}
+                {%- endif -%}
+              </a>
+
+              <div>
+                <h2 class="flint-cart__title"><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
+                {%- unless item.product.has_only_default_variant -%}
+                  <p class="flint-cart__meta">{{ item.variant.title }}</p>
+                {%- endunless -%}
+
+                <div class="flint-qty">
+                  <button type="button" aria-label="Reduce quantity" data-flint-qty="-1">&minus;</button>
+                  <label class="visually-hidden" for="qty-{{ item.index | plus: 1 }}">Quantity</label>
+                  <input id="qty-{{ item.index | plus: 1 }}" type="number" name="updates[]"
+                         value="{{ item.quantity }}" min="0" inputmode="numeric" data-flint-qty-input>
+                  <button type="button" aria-label="Increase quantity" data-flint-qty="1">+</button>
+                </div>
+
+                <a class="flint-cart__remove" href="{{ item.url_to_remove }}">Remove</a>
+              </div>
+
+              <p class="flint-price flint-price--card">{{ item.final_line_price | money_without_trailing_zeros }}</p>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <aside class="flint-cart__summary">
+          <div class="flint-cart__row">
+            <span>Subtotal</span>
+            <span class="flint-price flint-price--card">{{ cart.total_price | money_without_trailing_zeros }}</span>
+          </div>
+          <div class="flint-cart__row">
+            <span>Delivery</span>
+            <span>{{ section.settings.delivery_line }}</span>
+          </div>
+          <div class="flint-cart__row flint-cart__row--total">
+            <span>Total</span>
+            <span class="flint-price">{{ cart.total_price | money_without_trailing_zeros }}</span>
+          </div>
+
+          <button type="submit" name="checkout" class="flint-btn flint-btn--primary">Checkout</button>
+          <button type="submit" name="update" class="flint-btn flint-btn--secondary" style="margin-top:var(--sp-2);">Update basket</button>
+
+          <p class="flint-caption" style="margin-top: var(--sp-4);">{{ section.settings.reassurance }}</p>
+        </aside>
+      </div>
+    </form>
+
+  {%- else -%}
+    <div style="padding-block: var(--sp-8); max-width: 52ch;">
+      <p class="flint-lede">Your basket is empty.</p>
+      <p class="flint-small" style="margin-top: var(--sp-3);">
+        Not sure where to start? Wall lights do the quiet work in most houses.
+      </p>
+      <a class="flint-btn flint-btn--primary" href="{{ section.settings.empty_url | default: routes.all_products_collection_url }}"
+         style="margin-top: var(--sp-5);">
+        {{ section.settings.empty_label }}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    document.querySelectorAll('[data-flint-qty]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = btn.parentNode.querySelector('[data-flint-qty-input]');
+        if (!input) return;
+        var next = Math.max(0, parseInt(input.value, 10) + parseInt(btn.dataset.flintQty, 10));
+        input.value = next;
+        input.form.querySelector('[name="update"]').click();
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "delivery_line", "label": "Delivery line", "default": "Calculated at checkout" },
+    { "type": "textarea", "id": "reassurance", "label": "Reassurance",
+      "default": "Free UK delivery over £75. Despatched within two working days. 30 days to change your mind." },
+    { "type": "text", "id": "empty_label", "label": "Empty basket link label", "default": "View wall lights" },
+    { "type": "url", "id": "empty_url", "label": "Empty basket link" },
+    { "type": "paragraph", "content": "No upsells, no free-delivery progress bar, no urgency. The basket's job is to get out of the way." }
+  ]
+}
+{% endschema %}
