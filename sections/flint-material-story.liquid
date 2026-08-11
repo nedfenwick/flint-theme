@@ -1,0 +1,57 @@
+{%- comment -%}
+  FLINT — MATERIAL STORY (§24, section 06)
+  The only dark section on the homepage, and the one doing most of the
+  premium work. Two macro images. Rotate between finishes and materials.
+{%- endcomment -%}
+
+<section class="flint-section flint-section--home flint-section--inverse">
+  <div class="flint-container">
+    <div class="flint-split flint-split--reverse">
+
+      <div class="flint-stack">
+        {%- if section.settings.label != blank -%}
+          <p class="flint-label flint-label--brass">{{ section.settings.label }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2>{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.body != blank -%}
+          <p class="flint-small" style="max-width: 38ch;">{{ section.settings.body }}</p>
+        {%- endif -%}
+        {%- if section.settings.link_label != blank -%}
+          <a class="flint-btn flint-btn--ghost-inverse" href="{{ section.settings.link | default: '#' }}">{{ section.settings.link_label }}</a>
+        {%- endif -%}
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3);">
+        {% render 'flint-image', image: section.settings.image_1, placeholder: section.settings.placeholder_1,
+           ratio: 'product', alt: section.settings.alt_1, sizes: '(max-width: 899px) 50vw, 27vw' %}
+        {% render 'flint-image', image: section.settings.image_2, placeholder: section.settings.placeholder_2,
+           ratio: 'product', alt: section.settings.alt_2, sizes: '(max-width: 899px) 50vw, 27vw' %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Material story",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Material story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Aged brass, and how it changes" },
+    { "type": "textarea", "id": "body", "label": "Body",
+      "default": "Unlacquered brass darkens where it is touched and lightens where it is not. In five years a handle, a switch and a wall light will not match — which is the point." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Materials & finishes" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "image_picker", "id": "image_1", "label": "Image one" },
+    { "type": "text", "id": "alt_1", "label": "Image one alt text", "default": "Unlacquered aged brass, close up" },
+    { "type": "text", "id": "placeholder_1", "label": "Placeholder one" },
+    { "type": "image_picker", "id": "image_2", "label": "Image two" },
+    { "type": "text", "id": "alt_2", "label": "Image two alt text", "default": "Bronze, close up" },
+    { "type": "text", "id": "placeholder_2", "label": "Placeholder two" }
+  ],
+  "presets": [{ "name": "Material story" }]
+}
+{% endschema %}

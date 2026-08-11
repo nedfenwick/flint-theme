@@ -1,0 +1,57 @@
+{%- comment -%}
+  FLINT — PRODUCT CARD (§23)
+  No border, no shadow, no badge, no quick-add, no star rating.
+  Hover crossfades to gallery slot 02, the room shot.
+
+  Usage:
+    {% render 'flint-product-card', product: product, sizes: '(max-width: 767px) 50vw, 22vw' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign primary = product.featured_media
+  assign secondary = product.media[1]
+  assign finish = product.selected_or_first_available_variant.metafields.flint.finish_name.value
+  assign variant_count = product.variants | size
+  assign card_sizes = sizes | default: '(max-width: 767px) 50vw, 22vw'
+-%}
+
+<a class="flint-card" href="{{ product.url }}">
+  <div class="flint-card__media flint-media flint-media--product">
+    {%- if primary -%}
+      {{ primary | image_url: width: 1200
+                 | image_tag: loading: 'lazy', sizes: card_sizes,
+                   widths: '300,450,600,900,1200', alt: primary.alt | default: product.title }}
+    {%- endif -%}
+    {%- if secondary -%}
+      <div class="flint-card__alt" aria-hidden="true">
+        {{ secondary | image_url: width: 1200
+                     | image_tag: loading: 'lazy', sizes: card_sizes,
+                       widths: '300,450,600,900,1200', alt: '' }}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <h3 class="flint-card__title">{{ product.title }}</h3>
+
+  {%- if finish != blank or variant_count > 1 -%}
+    <p class="flint-card__meta">
+      {%- if finish != blank -%}{{ finish }}{%- endif -%}
+      {%- if variant_count > 1 -%}
+        {%- if finish != blank %} &middot; {% endif -%}
+        {{ variant_count }} finishes
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+
+  {%- comment -%}
+    Price: tabular, unstyled, never bold. Where a product has a price range
+    we say "from" — never a strike-through, never a saving. (§15, §30)
+  {%- endcomment -%}
+  <p class="flint-price flint-price--card">
+    {%- if product.price_varies -%}
+      {{ product.price_min | money_without_trailing_zeros }} <span class="flint-small">from</span>
+    {%- else -%}
+      {{ product.price | money_without_trailing_zeros }}
+    {%- endif -%}
+  </p>
+</a>

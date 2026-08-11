@@ -1,0 +1,158 @@
+/* ==========================================================================
+   FLINT — DESIGN TOKENS
+   Every colour, size and spacing value in the theme resolves to a token here.
+   Nothing else in the codebase may declare a raw colour or a raw pixel gap.
+   Reference: Brand Manual §14 Typography · §15 Colour · §16 Layout
+   ========================================================================== */
+
+:root {
+
+  /* ---------- COLOUR — raw palette (§15) ------------------------------- */
+  --flint-limewash:    #FAF7F2;
+  --flint-chalk:       #F1ECE3;
+  --flint-cortex:      #E3DCD0;
+  --flint-mortar:      #C6BFB2;
+  --flint-knap:        #645F57;
+  --flint-flint:       #2A2724;
+  --flint-ink:         #14120F;
+  --flint-brass:       #A98A55;
+  --flint-brass-deep:  #745C36;
+  --flint-lichen:      #666B57;
+  --flint-rust:        #8A4B3C;
+  --flint-moss:        #4E6350;
+  --flint-ochre:       #94703A;
+
+  /* Tints used only for functional message fields */
+  --flint-rust-field:  #F6EEEB;
+  --flint-moss-field:  #EDF1ED;
+
+  /* ---------- COLOUR — semantic roles ---------------------------------- */
+  --surface-page:      var(--flint-chalk);      /* ~60% of every surface   */
+  --surface-raised:    var(--flint-limewash);   /* cards, tiles, inputs    */
+  --surface-band:      var(--flint-cortex);     /* alternating sections    */
+  --surface-inverse:   var(--flint-flint);      /* dark bands, footer      */
+
+  --text-primary:      var(--flint-flint);
+  --text-secondary:    var(--flint-knap);
+  --text-inverse:      var(--flint-limewash);
+  --text-inverse-dim:  rgba(226, 220, 208, 0.66);
+  --text-accent:       var(--flint-brass-deep);  /* AA on Chalk — 5.4:1    */
+
+  --border-default:    var(--flint-mortar);
+  --border-strong:     var(--flint-flint);
+  --border-inverse:    rgba(226, 220, 208, 0.16);
+
+  --accent-hairline:   var(--flint-brass);       /* rules on dark only     */
+  --focus-ring:        var(--flint-brass-deep);
+
+  --state-error:       var(--flint-rust);
+  --state-success:     var(--flint-moss);
+  --state-notice:      var(--flint-ochre);
+  /* There is deliberately no --state-sale. See §15. */
+
+  /* ---------- TYPEFACES (§14) ------------------------------------------ */
+  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                Helvetica, Arial, sans-serif;
+
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+
+  /* ---------- TYPE SCALE — fluid between mobile and desktop ------------ */
+  /* Lower bound = mobile value, upper bound = desktop value (§14 table).  */
+  --size-h1:    clamp(34px, 2.20vw + 24.0px, 56px);
+  --size-h2:    clamp(27px, 1.25vw + 20.0px, 38px);
+  --size-h3:    clamp(21px, 0.60vw + 17.5px, 26px);
+  --size-h4:    clamp(18px, 0.25vw + 16.4px, 20px);
+  --size-lede:  clamp(18px, 0.35vw + 15.9px, 21px);
+  --size-body:  16px;
+  --size-small: 14px;
+  --size-spec:  13px;
+  --size-nav:   12px;
+  --size-btn:   13px;
+  --size-label: 10px;
+  --size-cap:   12px;
+  --size-price: clamp(18px, 0.10vw + 17.4px, 19px);
+  --size-price-card: clamp(15px, 0.10vw + 14.4px, 16px);
+  --size-quote: clamp(19px, 0.55vw + 15.5px, 24px);
+
+  --lh-h1:    1.10;
+  --lh-h2:    1.16;
+  --lh-h3:    1.25;
+  --lh-h4:    1.35;
+  --lh-lede:  1.55;
+  --lh-body:  1.65;
+  --lh-small: 1.60;
+  --lh-spec:  1.70;
+  --lh-tight: 1.00;
+
+  --track-h1:    -0.020em;
+  --track-h2:    -0.015em;
+  --track-h3:    -0.010em;
+  --track-none:   0;
+  --track-nav:    0.100em;
+  --track-btn:    0.080em;
+  --track-label:  0.220em;
+  --track-cap:    0.010em;
+
+  /* ---------- SPACING — 8px base (§16) --------------------------------- */
+  --sp-1:   4px;
+  --sp-2:   8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+  --sp-7:  48px;
+  --sp-8:  64px;
+  --sp-9:  96px;
+  --sp-10: 128px;
+
+  /* Vertical rhythm */
+  --section-gap:      clamp(72px, 7.0vw, 128px);  /* between homepage blocks */
+  --section-pad:      clamp(56px, 5.0vw,  96px);  /* inside a content block  */
+  --grid-row-gap:     clamp(40px, 3.0vw,  64px);
+  --card-pad:         clamp(24px, 1.8vw,  32px);
+
+  /* ---------- LAYOUT (§16) --------------------------------------------- */
+  --container-max:    1320px;
+  --container-pad:    clamp(20px, 4vw, 80px);
+  --grid-columns:     12;
+  --grid-gap:         clamp(16px, 1.7vw, 24px);
+
+  /* ---------- BORDERS, ELEVATION, MOTION ------------------------------- */
+  --hairline:      1px;
+  --radius:        0;      /* Everything is square. */
+  --radius-input:  2px;    /* The single permitted exception. */
+  --shadow:        none;   /* There are no shadows in this system. */
+
+  --ease:          cubic-bezier(0.25, 0.10, 0.25, 1);
+  --dur-fast:      200ms;
+  --dur:           250ms;
+  --dur-slow:      300ms;
+
+  /* ---------- COMPONENT SIZING ----------------------------------------- */
+  --header-h:      76px;
+  --header-h-sm:   60px;
+  --btn-h:         48px;
+  --tap-min:       48px;
+  --swatch:        40px;
+
+  /* ---------- IMAGE RATIOS (§16) --------------------------------------- */
+  --ratio-product:   4 / 5;
+  --ratio-square:    1 / 1;
+  --ratio-room:      3 / 2;
+  --ratio-hero:      16 / 9;
+  --ratio-pin:       2 / 3;
+}
+
+/* Mobile header height */
+@media (max-width: 767px) {
+  :root { --header-h: var(--header-h-sm); }
+}
+
+/* Honour reduced-motion at the token level so nothing has to remember to. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 1ms; --dur: 1ms; --dur-slow: 1ms; }
+}

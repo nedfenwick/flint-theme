@@ -1,0 +1,50 @@
+{%- comment -%}
+  FLINT — PRODUCT GRID (§24, section 07)
+  Four products, eight maximum. Merchandised by hand. Prices shown plainly.
+{%- endcomment -%}
+
+{%- assign products = section.settings.collection.products -%}
+
+<section class="flint-section flint-section--home{% if section.settings.band %} flint-section--band{% endif %}">
+  <div class="flint-container">
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-5); margin-bottom: var(--sp-5);">
+      {%- if section.settings.label != blank -%}
+        <p class="flint-label">{{ section.settings.label }}</p>
+      {%- endif -%}
+      {%- if section.settings.link_label != blank and section.settings.collection != blank -%}
+        <a class="flint-link" href="{{ section.settings.collection.url }}">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- if products.size > 0 -%}
+      <div class="flint-tiles" style="--cols: 4; --cols-md: 2; --cols-sm: 2;">
+        {%- for product in products limit: section.settings.limit -%}
+          {% render 'flint-product-card', product: product %}
+        {%- endfor -%}
+      </div>
+    {%- elsif request.design_mode -%}
+      <p class="flint-small">
+        Choose a collection with products in it to populate this section.
+        It is hidden on the live site until then.
+      </p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section label", "default": "New this season" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "limit", "min": 4, "max": 8, "step": 4, "default": 4, "label": "Products to show",
+      "info": "Never more than eight on the homepage." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all" },
+    { "type": "checkbox", "id": "band", "label": "Cortex background band", "default": false }
+  ],
+  "presets": [{ "name": "Product grid" }]
+}
+{% endschema %}

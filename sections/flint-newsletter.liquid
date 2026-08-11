@@ -1,0 +1,52 @@
+{%- comment -%}
+  FLINT — NEWSLETTER (§24, section 10)
+  Inline, never a modal. States the frequency and promises no offers —
+  which is precisely why people subscribe. (§31)
+{%- endcomment -%}
+
+<section class="flint-section flint-section--home" style="border-top: var(--hairline) solid var(--border-default);">
+  <div class="flint-container flint-text-center">
+    {%- if section.settings.label != blank -%}
+      <p class="flint-label" style="margin-bottom: var(--sp-3);">{{ section.settings.label }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 style="margin-bottom: var(--sp-2);">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <p class="flint-small" style="margin-bottom: var(--sp-5);">{{ section.settings.body }}</p>
+    {%- endif -%}
+
+    {%- form 'customer', class: 'flint-signup' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <label class="visually-hidden" for="flint-newsletter-email">Email address</label>
+      <input
+        class="flint-field"
+        id="flint-newsletter-email"
+        type="email"
+        name="contact[email]"
+        placeholder="Email address"
+        autocomplete="email"
+        required
+      >
+      <button class="flint-btn flint-btn--primary" type="submit">Subscribe</button>
+    {%- endform -%}
+
+    {%- if form.posted_successfully? -%}
+      <p class="flint-msg flint-msg--success" style="margin-top: var(--sp-4); display: inline-block;">Thank you. You're on the list.</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Newsletter" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New pieces, guides and the occasional project" },
+    { "type": "text", "id": "body", "label": "Body", "default": "Roughly twice a month. No offers.",
+      "info": "State the frequency and keep the promise. It is the reason people subscribe." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

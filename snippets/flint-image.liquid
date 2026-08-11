@@ -1,0 +1,31 @@
+{%- comment -%}
+  FLINT — IMAGE
+  Renders a merchandiser-picked image, or falls back to a bundled placeholder
+  so a freshly installed theme looks right before any image is chosen.
+
+  BEFORE LAUNCH: every flint-ph-*.webp asset is a drawn stand-in and must be
+  replaced with real photography. Brand Manual §19, §21.
+
+  Usage:
+    {% render 'flint-image',
+       image: section.settings.image,
+       placeholder: 'flint-ph-room-kitchen.webp',
+       ratio: 'room', alt: 'Pendants over a kitchen island',
+       sizes: '(max-width: 767px) 100vw, 50vw', loading: 'lazy' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign r = ratio | default: 'product'
+  assign l = loading | default: 'lazy'
+  assign s = sizes | default: '100vw'
+-%}
+
+<div class="flint-media flint-media--{{ r }}">
+  {%- if image != blank -%}
+    {{ image
+       | image_url: width: 1800
+       | image_tag: loading: l, sizes: s, widths: '300,450,600,900,1200,1600,1800', alt: alt }}
+  {%- elsif placeholder != blank -%}
+    <img src="{{ placeholder | asset_url }}" alt="{{ alt | escape }}" loading="{{ l }}">
+  {%- endif -%}
+</div>

@@ -1,0 +1,84 @@
+{%- comment -%}
+  FLINT — JOURNAL (§24, section 09)
+  Three articles. The authority section. Pulls from a blog when one exists,
+  otherwise renders manual blocks so it works before the Journal is built.
+{%- endcomment -%}
+
+{%- assign blog = blogs[section.settings.blog] -%}
+
+<section class="flint-section flint-section--home">
+  <div class="flint-container">
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-5); margin-bottom: var(--sp-5);">
+      {%- if section.settings.label != blank -%}
+        <p class="flint-label">{{ section.settings.label }}</p>
+      {%- endif -%}
+      {%- if section.settings.link_label != blank -%}
+        <a class="flint-link" href="{{ blog.url | default: section.settings.link | default: '#' }}">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </div>
+
+    <div class="flint-tiles" style="--cols: 3; --cols-md: 3; --cols-sm: 1;">
+      {%- if blog.articles_count > 0 -%}
+        {%- for article in blog.articles limit: 3 -%}
+          <a class="flint-tile" href="{{ article.url }}">
+            <div class="flint-media flint-media--room">
+              {%- if article.image -%}
+                {{ article.image | image_url: width: 1200
+                   | image_tag: loading: 'lazy', sizes: '(max-width: 767px) 100vw, 30vw',
+                     widths: '300,600,900,1200', alt: article.image.alt | default: article.title }}
+              {%- endif -%}
+            </div>
+            {%- if article.tags.size > 0 -%}
+              <p class="flint-label" style="margin: var(--sp-3) 0 var(--sp-1);">{{ article.tags.first }}</p>
+            {%- endif -%}
+            <h3 class="flint-tile__title" style="margin-top: 0;">{{ article.title }}</h3>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          <a class="flint-tile" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+            {% render 'flint-image', image: block.settings.image, placeholder: block.settings.placeholder,
+               ratio: 'room', alt: block.settings.title, sizes: '(max-width: 767px) 100vw, 30vw' %}
+            {%- if block.settings.kicker != blank -%}
+              <p class="flint-label" style="margin: var(--sp-3) 0 var(--sp-1);">{{ block.settings.kicker }}</p>
+            {%- endif -%}
+            <h3 class="flint-tile__title" style="margin-top: 0;">{{ block.settings.title }}</h3>
+          </a>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Journal",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section label", "default": "From the Journal" },
+    { "type": "text", "id": "blog", "label": "Blog handle", "default": "journal",
+      "info": "Once the Journal blog exists, its three most recent articles replace the blocks below automatically." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "All guides" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "blocks": [
+    {
+      "type": "article",
+      "name": "Placeholder article",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "kicker", "label": "Kicker", "default": "Guide" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "placeholder", "label": "Placeholder asset" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Journal", "blocks": [
+    { "type": "article" }, { "type": "article" }, { "type": "article" }
+  ] }]
+}
+{% endschema %}

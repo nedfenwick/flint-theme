@@ -1,0 +1,66 @@
+{%- comment -%}
+  FLINT — CATEGORY / ROOM GRID (§24, sections 02 and 05)
+  Used twice on the homepage: categories (product-on-plaster, six tiles)
+  and rooms (lifestyle, four tiles).
+{%- endcomment -%}
+
+<section class="flint-section flint-section--home{% if section.settings.band %} flint-section--band{% endif %}">
+  <div class="flint-container">
+
+    {%- if section.settings.label != blank -%}
+      <p class="flint-label" style="margin-bottom: var(--sp-5);">{{ section.settings.label }}</p>
+    {%- endif -%}
+
+    <div class="flint-tiles" style="--cols: {{ section.settings.columns }}; --cols-md: 3; --cols-sm: 2;">
+      {%- for block in section.blocks -%}
+        {%- assign col = block.settings.collection -%}
+        {%- assign title = block.settings.title | default: col.title -%}
+        <a class="flint-tile" href="{{ col.url | default: block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+          {% render 'flint-image',
+             image: block.settings.image,
+             placeholder: block.settings.placeholder,
+             ratio: section.settings.ratio,
+             alt: title,
+             sizes: '(max-width: 767px) 50vw, 20vw' %}
+          <h3 class="flint-tile__title">{{ title }}</h3>
+        </a>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Category / room grid",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section label", "default": "Shop by category", "info": "Four words maximum." },
+    { "type": "range", "id": "columns", "min": 3, "max": 6, "step": 1, "default": 6, "label": "Columns (desktop)" },
+    { "type": "select", "id": "ratio", "label": "Image ratio", "default": "product",
+      "options": [
+        { "value": "product", "label": "4:5 portrait — categories" },
+        { "value": "room", "label": "3:2 landscape — rooms" },
+        { "value": "square", "label": "1:1 square" }
+      ] },
+    { "type": "checkbox", "id": "band", "label": "Cortex background band", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title override" },
+        { "type": "url", "id": "link", "label": "Link override" },
+        { "type": "text", "id": "placeholder", "label": "Placeholder asset", "info": "Temporary. Remove once a real image is set." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Category grid", "blocks": [
+    { "type": "tile" }, { "type": "tile" }, { "type": "tile" },
+    { "type": "tile" }, { "type": "tile" }, { "type": "tile" }
+  ] }]
+}
+{% endschema %}

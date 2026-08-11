@@ -1,0 +1,309 @@
+/* ==========================================================================
+   FLINT — COMPONENTS
+   Buttons, header, product card, tiles, forms, footer.
+   No raw colours or gaps: everything resolves to a token.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   BUTTONS (§23)
+   -------------------------------------------------------------------------- */
+
+.flint-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-h);
+  padding: 0 30px;
+  font-family: var(--font-sans);
+  font-size: var(--size-btn);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-btn);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
+}
+
+.flint-btn--primary {
+  background: var(--flint-flint);
+  color: var(--text-inverse);
+  border-color: var(--flint-flint);
+}
+.flint-btn--primary:hover { background: var(--flint-ink); border-color: var(--flint-ink); }
+
+.flint-btn--secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.flint-btn--secondary:hover { background: var(--flint-flint); color: var(--text-inverse); }
+
+.flint-btn--light {
+  background: var(--flint-limewash);
+  color: var(--text-primary);
+  border-color: var(--flint-limewash);
+}
+.flint-btn--light:hover { background: #fff; }
+
+.flint-btn--ghost-inverse {
+  background: transparent;
+  color: var(--accent-hairline);
+  border-color: var(--accent-hairline);
+}
+.flint-btn--ghost-inverse:hover { background: var(--accent-hairline); color: var(--flint-flint); }
+
+/* Quiet text link with a rule beneath — used instead of a third button style */
+.flint-link {
+  display: inline-block;
+  font-size: var(--size-small);
+  color: var(--text-accent);
+  text-decoration: none;
+  border-bottom: var(--hairline) solid var(--text-accent);
+  padding-bottom: 3px;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.flint-link--inverse { color: var(--accent-hairline); border-color: var(--accent-hairline); }
+
+/* --------------------------------------------------------------------------
+   HEADER & NAVIGATION (§23)
+   -------------------------------------------------------------------------- */
+
+.flint-utility {
+  background: var(--surface-page);
+  border-bottom: var(--hairline) solid rgba(198, 191, 178, 0.5);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.flint-utility__inner { display: flex; justify-content: flex-end; gap: var(--sp-5); padding-block: 7px; }
+.flint-utility a { color: inherit; text-decoration: none; }
+.flint-utility a:hover { color: var(--text-primary); }
+@media (max-width: 899px) { .flint-utility { display: none; } }
+
+.flint-header {
+  background: var(--surface-page);
+  border-bottom: var(--hairline) solid var(--border-default);
+}
+.flint-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  min-height: var(--header-h);
+}
+.flint-header__logo { display: block; width: 148px; flex: 0 0 auto; }
+.flint-header__logo svg { width: 100%; height: auto; }
+@media (max-width: 899px) { .flint-header__logo { width: 104px; } }
+
+.flint-nav { display: flex; gap: clamp(16px, 2vw, 30px); }
+.flint-nav a {
+  font-size: var(--size-nav);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding-bottom: 5px;
+  border-bottom: var(--hairline) solid transparent;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+/* Active state is a brass hairline. Never a colour change, never bold. */
+.flint-nav a:hover,
+.flint-nav a[aria-current] { border-bottom-color: var(--accent-hairline); }
+@media (max-width: 899px) { .flint-nav { display: none; } }
+
+.flint-header__actions { display: flex; align-items: center; gap: var(--sp-4); }
+.flint-header__icon {
+  width: var(--tap-min); height: var(--tap-min);
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: 0; cursor: pointer; color: var(--text-primary);
+}
+.flint-header__burger { display: none; }
+@media (max-width: 899px) { .flint-header__burger { display: inline-flex; } }
+
+/* --------------------------------------------------------------------------
+   MEDIA — the frame every image sits in
+   -------------------------------------------------------------------------- */
+
+.flint-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-band);
+  aspect-ratio: var(--ratio, 4 / 5);
+}
+.flint-media > img { width: 100%; height: 100%; object-fit: cover; }
+.flint-media--room    { --ratio: var(--ratio-room); }
+.flint-media--square  { --ratio: var(--ratio-square); }
+.flint-media--product { --ratio: var(--ratio-product); }
+
+/* --------------------------------------------------------------------------
+   PRODUCT CARD (§23)
+   No border, no shadow, no badge. Hover crossfades to gallery slot 02.
+   -------------------------------------------------------------------------- */
+
+.flint-card { display: block; text-decoration: none; color: inherit; }
+.flint-card__media { position: relative; background: var(--surface-raised); }
+.flint-card__media .flint-card__alt {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.flint-card:hover .flint-card__alt,
+.flint-card:focus-visible .flint-card__alt { opacity: 1; }
+
+.flint-card__title {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-regular);
+  font-size: var(--size-h4);
+  line-height: 1.3;
+  margin: var(--sp-3) 0 var(--sp-1);
+}
+.flint-card__meta {
+  font-size: var(--size-small);
+  color: var(--text-secondary);
+  margin: 0 0 var(--sp-1);
+}
+/* Listing price sits in Knap; PDP price sits in Flint. */
+.flint-card .flint-price { color: var(--text-secondary); }
+
+/* --------------------------------------------------------------------------
+   CATEGORY / ROOM TILE
+   -------------------------------------------------------------------------- */
+
+.flint-tile { display: block; text-decoration: none; color: inherit; }
+.flint-tile__title {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-regular);
+  font-size: var(--size-h4);
+  margin: var(--sp-3) 0 0;
+}
+.flint-tile:hover .flint-tile__title { text-decoration: underline; text-underline-offset: 4px; }
+
+/* --------------------------------------------------------------------------
+   HERO (§24)
+   One image, one headline of six words or fewer, one link.
+   -------------------------------------------------------------------------- */
+
+.flint-hero {
+  position: relative;
+  min-height: clamp(440px, 72vh, 760px);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.flint-hero__media { position: absolute; inset: 0; }
+.flint-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+.flint-hero__inner { position: relative; z-index: 2; padding-block: clamp(28px, 4vw, 56px); width: 100%; }
+.flint-hero__title {
+  font-family: var(--font-serif);
+  font-weight: 200;
+  font-size: var(--size-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--track-h1);
+  color: var(--text-inverse);
+  max-width: 16ch;
+  margin: 0 0 var(--sp-5);
+}
+/* No scrim plate, no shadow box. If the image will not hold the type,
+   choose a different image. (§13) A minimal text-shadow is the only
+   permitted assist. */
+.flint-hero--light-type .flint-hero__title { text-shadow: 0 1px 28px rgba(30, 24, 18, 0.35); }
+
+/* --------------------------------------------------------------------------
+   EDITORIAL STATEMENT (§24)
+   -------------------------------------------------------------------------- */
+
+.flint-statement {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-light);
+  font-size: clamp(19px, 1.1vw + 14px, 26px);
+  line-height: 1.5;
+  max-width: 46ch;
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   FINISH SWATCHES (§25)
+   Cropped photography of the real finish, never a flat colour chip.
+   -------------------------------------------------------------------------- */
+
+.flint-swatches { display: flex; gap: var(--sp-2); }
+.flint-swatch {
+  width: var(--swatch); height: var(--swatch);
+  border: var(--hairline) solid var(--border-default);
+  padding: 0; cursor: pointer; background-size: cover; background-position: center;
+}
+.flint-swatch[aria-checked="true"] {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   FORMS
+   -------------------------------------------------------------------------- */
+
+.flint-field {
+  display: block; width: 100%;
+  min-height: var(--btn-h);
+  padding: 0 var(--sp-4);
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  border: var(--hairline) solid var(--border-default);
+  border-radius: var(--radius-input);
+}
+.flint-field::placeholder { color: var(--text-secondary); }
+
+.flint-signup { display: flex; max-width: 420px; margin-inline: auto; }
+.flint-signup .flint-field { border-right: 0; border-radius: 0; }
+.flint-signup .flint-btn { flex: 0 0 auto; }
+@media (max-width: 520px) {
+  .flint-signup { flex-direction: column; gap: var(--sp-2); }
+  .flint-signup .flint-field { border-right: var(--hairline) solid var(--border-default); }
+}
+
+/* --------------------------------------------------------------------------
+   FOOTER (§23)
+   The one place on the site where density is welcome.
+   -------------------------------------------------------------------------- */
+
+.flint-footer { background: var(--surface-inverse); color: var(--text-inverse-dim); }
+.flint-footer__grid {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(4, 1fr);
+  gap: var(--sp-6);
+  padding-block: clamp(40px, 4vw, 64px) var(--sp-6);
+}
+@media (max-width: 899px) { .flint-footer__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .flint-footer__grid { grid-template-columns: 1fr; } }
+
+.flint-footer__logo { width: 128px; display: block; margin-bottom: var(--sp-3); }
+.flint-footer h2 { font-size: var(--size-label); }
+.flint-footer ul { list-style: none; padding: 0; margin: 0; }
+.flint-footer li { margin-bottom: var(--sp-2); }
+.flint-footer a { color: var(--text-inverse-dim); text-decoration: none; font-size: var(--size-small); }
+.flint-footer a:hover { color: var(--text-inverse); }
+.flint-footer__legal {
+  display: flex; justify-content: space-between; gap: var(--sp-5); flex-wrap: wrap;
+  border-top: var(--hairline) solid var(--border-inverse);
+  padding-block: var(--sp-4) var(--sp-6);
+  font-size: var(--size-cap);
+  color: rgba(226, 220, 208, 0.42);
+}
+
+/* --------------------------------------------------------------------------
+   FUNCTIONAL MESSAGES (§15)
+   Restrained by design. An error should read as a considered note.
+   -------------------------------------------------------------------------- */
+
+.flint-msg { padding: var(--sp-4) var(--sp-5); font-size: var(--size-small); border-left: 2px solid; }
+.flint-msg--error   { background: var(--flint-rust-field); border-color: var(--state-error);   color: var(--state-error); }
+.flint-msg--success { background: var(--flint-moss-field); border-color: var(--state-success); color: var(--state-success); }
+.flint-msg--notice  { background: transparent; border-color: var(--state-notice); color: var(--state-notice); }

@@ -1,0 +1,61 @@
+{%- comment -%}
+  FLINT — WORDMARK (Brand Manual §12)
+
+  Custom drawn. Five letters, all built from straight strokes, with the
+  knapped serif: a flat faceted plane cut at a shallow angle instead of a
+  bracket. Do not re-set this in a typeface. Do not re-track it.
+
+  Usage:
+    {% render 'flint-logo', colour: '#2A2724', width: '148px' %}
+
+  Permitted colours: Flint #2A2724 · Limewash #FAF7F2 · Chalk #F1ECE3
+  Brass is for physical production only — foil, engraving, signage. Never screen.
+{%- endcomment -%}
+
+{%- liquid
+  assign fill = colour | default: '#2A2724'
+  assign w = width | default: '148px'
+-%}
+
+<svg
+  viewBox="-6 -6 430 112"
+  style="width: {{ w }}; height: auto; display: block;"
+  role="img"
+  aria-label="{{ shop.name | escape }}"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="{{ fill }}"
+>
+  <rect x="11.75" y="0" width="12.5" height="100"/>
+  <rect x="11.75" y="0" width="40.25" height="9"/>
+  <rect x="46" y="0" width="6" height="19"/>
+  <rect x="24.25" y="44" width="23.75" height="8"/>
+  <rect x="43" y="44" width="5" height="14"/>
+  <polygon points="2,100 34,100 30,92 6,92"/>
+  <g transform="translate(92,0)">
+    <rect x="11.75" y="0" width="12.5" height="100"/>
+    <polygon points="2,0 34,0 30,8 6,8"/>
+    <rect x="4" y="91" width="50" height="9"/>
+    <rect x="48" y="80" width="6" height="20"/>
+  </g>
+  <g transform="translate(182,0)">
+    <rect x="8.75" y="0" width="12.5" height="100"/>
+    <polygon points="0,0 30,0 26,8 4,8"/>
+    <polygon points="0,100 30,100 26,92 4,92"/>
+  </g>
+  <g transform="translate(246,0)">
+    <rect x="8" y="0" width="4.6" height="100"/>
+    <rect x="63.4" y="0" width="4.6" height="100"/>
+    <polygon points="8,0 20.5,0 68,100 55.5,100"/>
+    <polygon points="0,0 25,0 21,8 4,8"/>
+    <polygon points="54,0 76,0 72,8 58,8"/>
+    <polygon points="0,100 21,100 17,92 4,92"/>
+    <polygon points="51,100 72,100 68,92 55,92"/>
+  </g>
+  <g transform="translate(356,0)">
+    <rect x="24.75" y="0" width="12.5" height="100"/>
+    <rect x="2" y="0" width="58" height="9"/>
+    <rect x="2" y="0" width="6" height="19"/>
+    <rect x="54" y="0" width="6" height="19"/>
+    <polygon points="15,100 47,100 43,92 19,92"/>
+  </g>
+</svg>
