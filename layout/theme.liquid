@@ -29,12 +29,7 @@
       (keeping £ × · — ‘ ’ “ ”), upload as theme assets and swap this for
       self-hosted @font-face. Target: ≤140KB total. Brand Manual §14.
     {%- endcomment -%}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,200;6..72,300;6..72,400;6..72,500&family=Inter:wght@300;400;500;600&display=swap"
-    >
+   {% render 'flint-fonts' %}
 
     {%- comment -%}
       Dawn's stylesheet is loaded on every template EXCEPT those we have
