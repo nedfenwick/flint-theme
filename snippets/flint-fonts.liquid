@@ -1,58 +1,68 @@
 {%- comment -%}
-  FLINT — SELF-HOSTED FONTS (§14)
+  FLINT - SELF-HOSTED FONTS (section 14)
 
-  Replaces the render-blocking Google Fonts request. Roughly half a second of
-  LCP on a 4G connection, and no third-party DNS lookup on first paint.
+  Replaces the render-blocking Google Fonts request. Removes a DNS lookup, a
+  TLS handshake and a blocking stylesheet from the critical path.
 
-  BEFORE THIS WORKS, four files must exist in assets/:
-    newsreader-latin.woff2       newsreader-latin-italic.woff2
-    inter-latin.woff2            inter-latin-ext.woff2
+  Seven static woff2 files in assets/, one per weight:
 
-  See FONTS.md for where to get them. Until they are uploaded, leave the
-  Google Fonts <link> in theme.liquid and do not render this snippet.
+    newsreader-200.woff2          ExtraLight  - hero headline
+    newsreader-300.woff2          Light       - h1, h2, ledes
+    newsreader-400.woff2          Regular     - h3, h4, card titles
+    newsreader-400-italic.woff2   Italic      - blockquotes
+    inter-400.woff2               Regular     - body
+    inter-500.woff2               Medium      - nav, buttons
+    inter-600.woff2               SemiBold    - labels
+
+  Google Webfonts Helper serves static weights, not variable fonts, so these
+  are individual font-face rules rather than weight ranges. See FONTS.md.
 {%- endcomment -%}
 
+{%- comment -%}
+  Only two preloads. Each competes with the hero image for bandwidth, so
+  preload the weights certain to appear above the fold and let the rest
+  arrive normally.
+{%- endcomment -%}
 <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="{{ 'newsreader-latin.woff2' | asset_url }}">
+      href="{{ 'newsreader-300.woff2' | asset_url }}">
 <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="{{ 'inter-latin.woff2' | asset_url }}">
+      href="{{ 'inter-400.woff2' | asset_url }}">
 
 <style>
-  /* Newsreader — variable, optical size 6–72, weight 200–500 */
   @font-face {
     font-family: 'Newsreader';
-    src: url('{{ 'newsreader-latin.woff2' | asset_url }}') format('woff2-variations');
-    font-weight: 200 500;
-    font-style: normal;
-    font-display: swap;
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F,
-                   U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215;
+    src: url('{{ 'newsreader-200.woff2' | asset_url }}') format('woff2');
+    font-weight: 200; font-style: normal; font-display: swap;
   }
   @font-face {
     font-family: 'Newsreader';
-    src: url('{{ 'newsreader-latin-italic.woff2' | asset_url }}') format('woff2-variations');
-    font-weight: 200 500;
-    font-style: italic;
-    font-display: swap;
+    src: url('{{ 'newsreader-300.woff2' | asset_url }}') format('woff2');
+    font-weight: 300; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Newsreader';
+    src: url('{{ 'newsreader-400.woff2' | asset_url }}') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Newsreader';
+    src: url('{{ 'newsreader-400-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 300 400; font-style: italic; font-display: swap;
   }
 
-  /* Inter — variable, weight 300–600 */
   @font-face {
     font-family: 'Inter';
-    src: url('{{ 'inter-latin.woff2' | asset_url }}') format('woff2-variations');
-    font-weight: 300 600;
-    font-style: normal;
-    font-display: swap;
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F,
-                   U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215;
+    src: url('{{ 'inter-400.woff2' | asset_url }}') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
   }
   @font-face {
     font-family: 'Inter';
-    src: url('{{ 'inter-latin-ext.woff2' | asset_url }}') format('woff2-variations');
-    font-weight: 300 600;
-    font-style: normal;
-    font-display: swap;
-    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
-                   U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    src: url('{{ 'inter-500.woff2' | asset_url }}') format('woff2');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('{{ 'inter-600.woff2' | asset_url }}') format('woff2');
+    font-weight: 600; font-style: normal; font-display: swap;
   }
 </style>
