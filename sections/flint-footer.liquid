@@ -8,6 +8,12 @@
   `menu_handle`. Shopify only guarantees `main-menu` and `footer` as valid
   link_list defaults, so the handle fallback is what makes a fresh install
   render correctly without anyone touching the editor.
+
+  The trading line at the foot is a legal requirement, not a flourish. A sole
+  trader using a business name must publish their own name and an address for
+  service; the Consumer Contracts Regulations want a geographic address and a
+  working email before anyone buys. Google's shopping reviewers look for the
+  same things, so it earns its place twice.
 {%- endcomment -%}
 
 <footer class="flint-footer">
@@ -23,8 +29,15 @@
             {{ section.settings.brand_line }}
           </p>
         {%- endif -%}
-        {%- if section.settings.legal_name != blank -%}
-          <p class="flint-caption" style="color: rgba(226,220,208,.45);">{{ section.settings.legal_name }}</p>
+
+        {%- if section.settings.trading_address != blank -%}
+          <address class="flint-footer__address">{{ section.settings.trading_address | newline_to_br }}</address>
+        {%- endif -%}
+
+        {%- if section.settings.contact_email != blank -%}
+          <p class="flint-footer__contact">
+            <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+          </p>
         {%- endif -%}
       </div>
 
@@ -50,8 +63,17 @@
 
     </div>
 
+    {%- if section.settings.show_trust -%}
+      <ul class="flint-trust">
+        {%- if section.settings.trust_1 != blank -%}<li>{{ section.settings.trust_1 }}</li>{%- endif -%}
+        {%- if section.settings.trust_2 != blank -%}<li>{{ section.settings.trust_2 }}</li>{%- endif -%}
+        {%- if section.settings.trust_3 != blank -%}<li>{{ section.settings.trust_3 }}</li>{%- endif -%}
+        {%- if section.settings.trust_4 != blank -%}<li>{{ section.settings.trust_4 }}</li>{%- endif -%}
+      </ul>
+    {%- endif -%}
+
     <div class="flint-footer__legal">
-      <span>&copy; {{ 'now' | date: '%Y' }} {{ section.settings.legal_name | default: shop.name }}</span>
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ section.settings.trading_name | default: shop.name }}</span>
       {%- if section.settings.legal_menu != blank -%}
         <span>
           {%- for link in section.settings.legal_menu.links -%}
@@ -59,9 +81,36 @@
           {%- endfor -%}
         </span>
       {%- endif -%}
+      {%- if section.settings.vat_note != blank -%}
+        <span>{{ section.settings.vat_note }}</span>
+      {%- endif -%}
     </div>
   </div>
 </footer>
+
+<style>
+  .flint-footer__address,
+  .flint-footer__contact {
+    font-style: normal;
+    font-size: var(--size-cap);
+    line-height: 1.7;
+    color: rgba(226, 220, 208, 0.55);
+    margin: 0 0 var(--sp-3);
+  }
+  .flint-footer__contact a { font-size: var(--size-cap); color: rgba(226, 220, 208, 0.72); }
+  .flint-footer__contact a:hover { color: var(--text-inverse); }
+
+  .flint-trust {
+    list-style: none; margin: 0; padding: var(--sp-4) 0;
+    display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6);
+    border-top: var(--hairline) solid var(--border-inverse);
+    font-size: var(--size-cap);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: rgba(226, 220, 208, 0.55);
+  }
+  .flint-trust li { margin: 0; }
+</style>
 
 {% schema %}
 {
@@ -74,7 +123,20 @@
       "default": "Lighting, well considered.",
       "info": "The footer is one of the few places the brand line and wordmark appear together."
     },
-    { "type": "text", "id": "legal_name", "label": "Legal name", "default": "Flint Lighting Ltd" },
+    { "type": "header", "content": "Trading details" },
+    { "type": "paragraph", "content": "Required disclosure, and what Google's shopping reviewers look for. Do not describe the business as a limited company unless one has been incorporated." },
+    { "type": "text", "id": "trading_name", "label": "Trading name line", "default": "Ned Fenwick, trading as Flint" },
+    { "type": "textarea", "id": "trading_address", "label": "Address",
+      "default": "Shilstone, Modbury\nIvybridge, Devon PL21 0TW\nUnited Kingdom" },
+    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "hello@flintlighting.com" },
+    { "type": "text", "id": "vat_note", "label": "Tax note", "default": "Not VAT registered" },
+    { "type": "header", "content": "Trust line" },
+    { "type": "checkbox", "id": "show_trust", "label": "Show trust line", "default": true },
+    { "type": "text", "id": "trust_1", "label": "Item 1", "default": "Dispatched from the UK" },
+    { "type": "text", "id": "trust_2", "label": "Item 2", "default": "Tracked delivery on every order" },
+    { "type": "text", "id": "trust_3", "label": "Item 3", "default": "14 days to change your mind" },
+    { "type": "text", "id": "trust_4", "label": "Item 4", "default": "Secure checkout" },
+    { "type": "header", "content": "Bottom bar" },
     { "type": "link_list", "id": "legal_menu", "label": "Bottom bar menu",
       "info": "Optional. Leave empty — Privacy and Terms already sit in the Policies column." }
   ],
