@@ -1,7 +1,16 @@
 {%- comment -%}
   FLINT — CONTACT (§09 voice, §23 layout)
-  Two columns: how to reach us, and a form. Response time stated once, at the
-  top, rather than buried. Emails are links, not text.
+
+  Order of operations matters here. Most people arriving on a contact page want
+  one of three things — where is it, can I send it back, what does delivery
+  cost — and all three are self-serve. So those go first, then the form, then
+  the questions we actually get asked. Writing to us should be the fourth thing
+  you try, not the first.
+
+  The trading details at the foot of the sidebar are not decoration: a sole
+  trader using a business name has to disclose their own name and an address
+  for service, and the Consumer Contracts Regulations require a geographic
+  address and a working email before anyone buys.
 {%- endcomment -%}
 
 <div class="flint-container">
@@ -15,6 +24,23 @@
       <p class="flint-lede" style="margin-top: var(--sp-4);">{{ section.settings.intro }}</p>
     {%- endif -%}
   </header>
+
+  {%- if section.settings.show_shortcuts -%}
+    <nav class="flint-contact__shortcuts" aria-label="Answer it yourself">
+      <a href="/pages/track-order">
+        <span class="flint-label flint-label--brass">Track an order</span>
+        <span class="flint-small">Follow your parcel with the number from your dispatch email.</span>
+      </a>
+      <a href="/pages/returns">
+        <span class="flint-label flint-label--brass">Returns</span>
+        <span class="flint-small">14 days to change your mind, and how to send something back.</span>
+      </a>
+      <a href="/pages/delivery">
+        <span class="flint-label flint-label--brass">Delivery</span>
+        <span class="flint-small">What it costs, how long it takes, where we deliver.</span>
+      </a>
+    </nav>
+  {%- endif -%}
 
   <div class="flint-contact">
 
@@ -34,6 +60,19 @@
           </div>
         {%- endif -%}
       {%- endfor -%}
+
+      {%- if section.settings.trading_name != blank -%}
+        <div class="flint-contact__legal">
+          <p class="flint-label">Trading details</p>
+          <p class="flint-small">{{ section.settings.trading_name }}</p>
+          {%- if section.settings.trading_address != blank -%}
+            <address class="flint-small">{{ section.settings.trading_address | newline_to_br }}</address>
+          {%- endif -%}
+          {%- if section.settings.trading_note != blank -%}
+            <p class="flint-small">{{ section.settings.trading_note }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
 
       {%- if page.content != blank -%}
         <div class="flint-contact__extra rte">{{ page.content }}</div>
@@ -66,12 +105,19 @@
         </div>
 
         <div class="flint-field-group">
+          <label class="flint-label" for="contact-order">Order number <span class="flint-optional">optional</span></label>
+          <input class="flint-field" id="contact-order" type="text" name="contact[Order number]"
+                 placeholder="e.g. #1042">
+        </div>
+
+        <div class="flint-field-group">
           <label class="flint-label" for="contact-topic">What is it about?</label>
           <select class="flint-field" id="contact-topic" name="contact[Topic]">
-            <option>An order</option>
+            <option>Where is my order</option>
+            <option>A return or refund</option>
+            <option>Something arrived damaged</option>
             <option>Choosing a fitting</option>
             <option>Specification or installation</option>
-            <option>Trade</option>
             <option>Something else</option>
           </select>
         </div>
@@ -86,9 +132,69 @@
         </div>
 
         <button class="flint-btn flint-btn--primary" type="submit">Send</button>
+
+        {%- if section.settings.privacy_note != blank -%}
+          <p class="flint-caption" style="margin-top: var(--sp-3);">{{ section.settings.privacy_note }}</p>
+        {%- endif -%}
       {%- endform -%}
     </div>
   </div>
+
+  {%- assign faq_count = 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'faq' -%}{%- assign faq_count = faq_count | plus: 1 -%}{%- endif -%}
+  {%- endfor -%}
+
+  {%- if faq_count > 0 -%}
+    <section class="flint-faq" aria-labelledby="flint-faq-head">
+      <h2 class="h3" id="flint-faq-head">{{ section.settings.faq_heading }}</h2>
+
+      <div class="flint-faq__list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'faq' -%}
+            <details class="flint-faq__item" {{ block.shopify_attributes }}>
+              <summary>
+                <span>{{ block.settings.question }}</span>
+                <svg class="flint-faq__chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                  <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.25"/>
+                </svg>
+              </summary>
+              <div class="flint-faq__answer rte">{{ block.settings.answer }}</div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <p class="flint-small flint-faq__foot">
+        Not here? Use the form above — we answer within one working day.
+      </p>
+    </section>
+
+    {%- comment -%}
+      FAQPage markup. Google will sometimes surface these directly, and a shop
+      that answers the awkward questions in its own markup reads as a real one.
+    {%- endcomment -%}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- assign i = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'faq' -%}
+            {%- if i > 0 -%},{%- endif -%}
+            {
+              "@type": "Question",
+              "name": {{ block.settings.question | strip_html | json }},
+              "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | strip_newlines | json }} }
+            }
+            {%- assign i = i | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    }
+    </script>
+  {%- endif -%}
 </div>
 
 <style>
@@ -97,9 +203,23 @@
     grid-template-columns: 5fr 7fr;
     gap: clamp(32px, 5vw, 88px);
     align-items: start;
-    padding-bottom: var(--section-pad);
   }
   @media (max-width: 899px) { .flint-contact { grid-template-columns: 1fr; gap: var(--sp-7); } }
+
+  .flint-contact__shortcuts {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap);
+    margin-bottom: var(--sp-7);
+  }
+  @media (max-width: 749px) { .flint-contact__shortcuts { grid-template-columns: 1fr; gap: 0; } }
+  .flint-contact__shortcuts a {
+    display: block; text-decoration: none;
+    border-top: var(--hairline) solid var(--border-strong);
+    padding-top: var(--sp-3); padding-bottom: var(--sp-3);
+    color: var(--text-primary);
+  }
+  @media (max-width: 749px) { .flint-contact__shortcuts a:last-child { border-bottom: var(--hairline) solid var(--border-strong); } }
+  .flint-contact__shortcuts a .flint-small { display: block; color: var(--text-secondary); margin-top: var(--sp-2); }
+  .flint-contact__shortcuts a:hover .flint-label--brass { color: var(--text-primary); }
 
   .flint-contact__route { padding-block: var(--sp-4); border-bottom: var(--hairline) solid var(--border-default); }
   .flint-contact__route:first-child { border-top: var(--hairline) solid var(--border-default); }
@@ -109,11 +229,15 @@
   .flint-contact__extra { margin-top: var(--sp-6); }
   .flint-contact__extra p { font-size: var(--size-small); color: var(--text-secondary); }
 
+  .flint-contact__legal { padding-block: var(--sp-4); }
+  .flint-contact__legal .flint-small, .flint-contact__legal address {
+    color: var(--text-secondary); font-style: normal; margin: var(--sp-2) 0 0; line-height: 1.6;
+  }
+
   .flint-field-group { margin-bottom: var(--sp-4); }
   .flint-field-group .flint-label { display: block; margin-bottom: var(--sp-2); }
+  .flint-optional { color: var(--text-secondary); letter-spacing: 0; text-transform: none; }
   .flint-field--area { height: auto; padding: var(--sp-3) var(--sp-4); line-height: 1.6; resize: vertical; }
-  /* A custom chevron, because appearance:none removes the native one and a
-     select with no affordance is not a select as far as anyone can tell. */
   select.flint-field {
     appearance: none;
     padding-right: 44px;
@@ -124,6 +248,26 @@
   }
   .flint-contact__form .flint-btn { margin-top: var(--sp-2); }
   @media (max-width: 599px) { .flint-contact__form .flint-btn { width: 100%; } }
+
+  .flint-faq { padding-block: var(--sp-8) var(--section-pad); max-width: 760px; }
+  .flint-faq__list { margin-top: var(--sp-5); }
+  .flint-faq__item { border-bottom: var(--hairline) solid var(--border-default); }
+  .flint-faq__item:first-child { border-top: var(--hairline) solid var(--border-default); }
+  .flint-faq__item summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
+    cursor: pointer; list-style: none;
+    padding-block: var(--sp-4);
+    font-family: var(--font-serif); font-size: var(--size-h4); font-weight: var(--weight-regular);
+    color: var(--text-primary);
+    min-height: var(--tap-min);
+  }
+  .flint-faq__item summary::-webkit-details-marker { display: none; }
+  .flint-faq__item summary:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+  .flint-faq__chevron { flex: 0 0 auto; color: var(--text-secondary); transition: transform var(--dur-fast) var(--ease); }
+  .flint-faq__item[open] .flint-faq__chevron { transform: rotate(180deg); }
+  .flint-faq__answer { padding-bottom: var(--sp-5); max-width: 62ch; }
+  .flint-faq__answer p { font-size: var(--size-small); color: var(--text-secondary); }
+  .flint-faq__foot { margin-top: var(--sp-5); color: var(--text-secondary); }
 </style>
 
 {% schema %}
@@ -134,8 +278,19 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Contact" },
     { "type": "textarea", "id": "intro", "label": "Introduction",
       "default": "A real person reads these. We answer within one working day, usually sooner." },
+    { "type": "checkbox", "id": "show_shortcuts", "label": "Show self-serve shortcuts", "default": true,
+      "info": "Tracking, returns and delivery, above the form." },
     { "type": "text", "id": "helper", "label": "Message helper text",
-      "default": "If it is about an order, include the order number. If it is about choosing a fitting, tell us the room and the ceiling height." }
+      "default": "If it is about an order, include the order number. If it is about choosing a fitting, tell us the room and the ceiling height." },
+    { "type": "text", "id": "privacy_note", "label": "Privacy note",
+      "default": "We use what you send only to answer you. See our privacy policy." },
+    { "type": "header", "content": "Frequently asked questions" },
+    { "type": "text", "id": "faq_heading", "label": "Heading", "default": "Questions we are asked most" },
+    { "type": "header", "content": "Trading details" },
+    { "type": "paragraph", "content": "Required disclosure. A sole trader using a business name must publish their own name and an address for service." },
+    { "type": "text", "id": "trading_name", "label": "Trading name line" },
+    { "type": "textarea", "id": "trading_address", "label": "Address" },
+    { "type": "textarea", "id": "trading_note", "label": "Note" }
   ],
   "blocks": [
     {
@@ -145,6 +300,14 @@
         { "type": "text", "id": "label", "label": "Label", "default": "General" },
         { "type": "text", "id": "email", "label": "Email address" },
         { "type": "textarea", "id": "note", "label": "Note" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
       ]
     }
   ]
