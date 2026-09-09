@@ -23,11 +23,8 @@
     {% endif %}
 
     {%- comment -%}
-      FONTS
-      Loaded from Google Fonts for now so the theme works immediately.
-      BEFORE LAUNCH: download Newsreader and Inter, subset to Latin + Latin-Ext
-      (keeping £ × · — ‘ ’ “ ”), upload as theme assets and swap this for
-      self-hosted @font-face. Target: ≤140KB total. Brand Manual §14.
+      FONTS — self-hosted woff2, seven static weights, served from Shopify's
+      own CDN. See FONTS.md. Brand Manual §14.
     {%- endcomment -%}
    {% render 'flint-fonts' %}
 
@@ -63,17 +60,8 @@
 
     {{ content_for_header }}
 
-    {%- comment -%} Organisation structured data — Brand Manual §23 {%- endcomment -%}
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": {{ shop.name | json }},
-        "url": {{ shop.url | json }},
-        "description": "Flint designs warm, architectural lighting for British homes and considered commercial interiors. Wall lights, pendants, picture lights and lamps in aged brass, bronze and opal glass.",
-        "slogan": "Lighting, well considered."
-      }
-    </script>
+    {%- comment -%} Trading identity and returns policy, machine-readable — §23 {%- endcomment -%}
+    {% render 'flint-organisation' %}
 
     {% render 'flint-schema' %}
   </head>

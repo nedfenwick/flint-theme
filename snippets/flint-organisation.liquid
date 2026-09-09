@@ -19,18 +19,17 @@
   "@type": "OnlineStore",
   "@id": "{{ shop.url }}/#organisation",
   "name": {{ shop.name | json }},
-  "legalName": {{ settings.trading_legal_name | default: 'Ned Fenwick' | json }},
+  "legalName": "Ned Fenwick, trading as Flint",
   "url": {{ shop.url | json }},
-  {%- if settings.brand_logo != blank %}
-  "logo": {{ settings.brand_logo | image_url: width: 600 | prepend: 'https:' | json }},
-  {%- endif %}
-  "email": {{ settings.trading_email | default: 'hello@flintlighting.com' | json }},
+  "description": "Flint sells warm, architectural lighting for British homes. Wall lights, pendants, picture lights and lamps in aged brass, bronze and opal glass, dispatched tracked from within the UK.",
+  "slogan": "Lighting, well considered.",
+  "email": "hello@flintlighting.com",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": {{ settings.trading_street | default: 'Shilstone, Modbury' | json }},
-    "addressLocality": {{ settings.trading_locality | default: 'Ivybridge' | json }},
-    "addressRegion": {{ settings.trading_region | default: 'Devon' | json }},
-    "postalCode": {{ settings.trading_postcode | default: 'PL21 0TW' | json }},
+    "streetAddress": "Shilstone, Modbury",
+    "addressLocality": "Ivybridge",
+    "addressRegion": "Devon",
+    "postalCode": "PL21 0TW",
     "addressCountry": "GB"
   },
   "areaServed": { "@type": "Country", "name": "United Kingdom" },
@@ -38,7 +37,8 @@
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "customer service",
-    "email": {{ settings.trading_email | default: 'hello@flintlighting.com' | json }},
+    "email": "hello@flintlighting.com",
+    "url": "{{ shop.url }}/pages/contact",
     "availableLanguage": "English",
     "areaServed": "GB"
   },
