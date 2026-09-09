@@ -1,14 +1,19 @@
 {%- comment -%}
   FLINT - HEADER (Brand Manual section 23)
-  76px Chalk. Six-item nav, uppercase, brass hairline active state.
-  Full-width mega menu on items with children. No announcement bar, ever.
+  76px Chalk. Nav uppercase with a brass hairline active state.
+  Full-width mega menu on items with children.
+
+  The utility bar is off by default. It exists for when Trade returns; until
+  then an empty strip above the logo is just noise.
+
+  There is no announcement bar in this theme and there never will be.
 {%- endcomment -%}
 
-{%- if section.settings.show_utility -%}
+{%- if section.settings.show_utility and section.blocks.size > 0 -%}
   <div class="flint-utility">
     <div class="flint-container flint-utility__inner">
       {%- for block in section.blocks -%}
-        {%- if block.type == 'utility_link' -%}
+        {%- if block.type == 'utility_link' and block.settings.label != blank -%}
           <a href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>{{- block.settings.label -}}</a>
         {%- endif -%}
       {%- endfor -%}
@@ -107,13 +112,15 @@
           </li>
         {%- endfor -%}
       </ul>
-      <ul class="flint-mobile-nav__utility">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'utility_link' -%}
-            <li><a href="{{ block.settings.link | default: '#' }}">{{ block.settings.label }}</a></li>
-          {%- endif -%}
-        {%- endfor -%}
-      </ul>
+      {%- if section.settings.show_utility -%}
+        <ul class="flint-mobile-nav__utility">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'utility_link' and block.settings.label != blank -%}
+              <li><a href="{{ block.settings.link | default: '#' }}">{{ block.settings.label }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
     </div>
   </div>
 </header>
@@ -193,8 +200,9 @@
   "name": "Header",
   "settings": [
     { "type": "link_list", "id": "menu", "label": "Main menu", "default": "main-menu",
-      "info": "Six items maximum. Items with sub-items open a full-width menu." },
-    { "type": "checkbox", "id": "show_utility", "label": "Show utility bar", "default": true },
+      "info": "Items with sub-items open a full-width menu." },
+    { "type": "checkbox", "id": "show_utility", "label": "Show utility bar", "default": false,
+      "info": "Off by default. Switch on and add links when Trade returns." },
     { "type": "header", "content": "Menu feature image" },
     { "type": "image_picker", "id": "mega_image", "label": "Image" },
     { "type": "text", "id": "mega_placeholder", "label": "Placeholder asset" },
@@ -208,13 +216,6 @@
       { "type": "url", "id": "link", "label": "Link" }
     ] }
   ],
-  "default": {
-    "settings": {},
-    "blocks": [
-      { "type": "utility_link", "settings": { "label": "Trade" } },
-      { "type": "utility_link", "settings": { "label": "Finish samples" } },
-      { "type": "utility_link", "settings": { "label": "About" } }
-    ]
-  }
+  "default": { "settings": {}, "blocks": [] }
 }
 {% endschema %}
