@@ -1,0 +1,108 @@
+{%- comment -%}
+  FLINT — TRACK AN ORDER
+
+  Two paths, in order of how well they work:
+
+  1. The mount point below (#flint-tracking-widget). Install the 17TRACK Order
+     Tracking app and point its embedded tracking page at /pages/track-order,
+     and the widget renders here — on our own page, in our own type, with the
+     carrier's live scans. AutoDS writes the tracking number into Shopify, and
+     17TRACK reads it from there, so nobody has to key anything in by hand.
+
+  2. Until that app is installed, the form below still works. It hands the
+     number to 17TRACK's public tracker in a new tab. Slightly less elegant,
+     but no customer is ever left without an answer.
+{%- endcomment -%}
+
+<div class="flint-container">
+  <header class="flint-page__head">
+    <p class="flint-label">{{ section.settings.eyebrow }}</p>
+    <h1 class="h2" style="margin-top: var(--sp-2);">{{ page.title }}</h1>
+  </header>
+
+  <div class="flint-page__body rte">
+    {%- if section.settings.intro != blank -%}
+      <p class="flint-lede">{{ section.settings.intro }}</p>
+    {%- endif -%}
+
+    <div class="flint-track">
+      <label class="flint-label" for="flint-track-input">{{ section.settings.field_label }}</label>
+      <div class="flint-track__row">
+        <input type="text" id="flint-track-input" name="tracking_number"
+               autocomplete="off" spellcheck="false"
+               placeholder="{{ section.settings.field_placeholder | escape }}">
+        <button type="button" class="flint-btn" data-flint-track>{{ section.settings.button_label }}</button>
+      </div>
+      <p class="flint-caption" id="flint-track-note">{{ section.settings.field_help }}</p>
+    </div>
+
+    {%- comment -%} 17TRACK renders into this container once the app is installed. {%- endcomment -%}
+    <div id="flint-tracking-widget" class="flint-track__widget"></div>
+
+    {{ page.content }}
+  </div>
+</div>
+
+<style>
+  .flint-track {
+    border-top: var(--hairline) solid var(--border-default);
+    border-bottom: var(--hairline) solid var(--border-default);
+    padding-block: var(--sp-5);
+    margin-block: var(--sp-6);
+  }
+  .flint-track__row { display: flex; gap: var(--sp-3); margin-top: var(--sp-3); flex-wrap: wrap; }
+  .flint-track__row input {
+    flex: 1 1 260px;
+    font-family: var(--font-sans); font-size: var(--size-body);
+    padding: var(--sp-3);
+    background: var(--surface-page);
+    color: var(--text-primary);
+    border: var(--hairline) solid var(--border-strong);
+    border-radius: 0;
+    min-height: var(--tap-min);
+  }
+  .flint-track__row input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+  .flint-track__row .flint-btn { flex: 0 0 auto; }
+  .flint-track .flint-caption { margin-top: var(--sp-3); color: var(--text-secondary); }
+  .flint-track__widget:empty { display: none; }
+  .flint-track__widget { margin-block: var(--sp-6); }
+</style>
+
+<script>
+  (function () {
+    var btn = document.querySelector('[data-flint-track]');
+    var input = document.getElementById('flint-track-input');
+    var note = document.getElementById('flint-track-note');
+    if (!btn || !input) return;
+
+    function go() {
+      var n = (input.value || '').trim().replace(/\s+/g, '');
+      if (!n) {
+        note.textContent = 'Enter the tracking number from your dispatch email.';
+        input.focus();
+        return;
+      }
+      window.open('https://t.17track.net/en#nums=' + encodeURIComponent(n), '_blank', 'noopener');
+    }
+
+    btn.addEventListener('click', go);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Track an order",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow label", "default": "Support" },
+    { "type": "textarea", "id": "intro", "label": "Introduction",
+      "default": "Every order is tracked from the moment it leaves the warehouse. Enter the number from your dispatch email below, or follow the link in the email itself." },
+    { "type": "text", "id": "field_label", "label": "Field label", "default": "Tracking number" },
+    { "type": "text", "id": "field_placeholder", "label": "Field placeholder", "default": "e.g. AB123456789GB" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Track" },
+    { "type": "text", "id": "field_help", "label": "Help text",
+      "default": "Your tracking number is in the dispatch email, not the order confirmation." }
+  ]
+}
+{% endschema %}
