@@ -1,0 +1,55 @@
+{%- comment -%}
+  FLINT — ORGANISATION IDENTITY (structured data)
+
+  Rendered on every page. This is the machine-readable half of the trading
+  disclosure in the footer: the same name, the same address, the same email.
+  Google's shopping and merchant reviews look for a consistent, verifiable
+  identity across the site, the structured data and the Merchant Center
+  account, and an inconsistency between the three is a common reason for a
+  new account to be held back.
+
+  `legalName` is the natural person who trades — there is no company here, so
+  there is no company number to claim, and inventing one would be worse than
+  leaving it out.
+{%- endcomment -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "OnlineStore",
+  "@id": "{{ shop.url }}/#organisation",
+  "name": {{ shop.name | json }},
+  "legalName": {{ settings.trading_legal_name | default: 'Ned Fenwick' | json }},
+  "url": {{ shop.url | json }},
+  {%- if settings.brand_logo != blank %}
+  "logo": {{ settings.brand_logo | image_url: width: 600 | prepend: 'https:' | json }},
+  {%- endif %}
+  "email": {{ settings.trading_email | default: 'hello@flintlighting.com' | json }},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ settings.trading_street | default: 'Shilstone, Modbury' | json }},
+    "addressLocality": {{ settings.trading_locality | default: 'Ivybridge' | json }},
+    "addressRegion": {{ settings.trading_region | default: 'Devon' | json }},
+    "postalCode": {{ settings.trading_postcode | default: 'PL21 0TW' | json }},
+    "addressCountry": "GB"
+  },
+  "areaServed": { "@type": "Country", "name": "United Kingdom" },
+  "currenciesAccepted": "GBP",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": {{ settings.trading_email | default: 'hello@flintlighting.com' | json }},
+    "availableLanguage": "English",
+    "areaServed": "GB"
+  },
+  "hasMerchantReturnPolicy": {
+    "@type": "MerchantReturnPolicy",
+    "applicableCountry": "GB",
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 14,
+    "returnMethod": "https://schema.org/ReturnByMail",
+    "returnFees": "https://schema.org/ReturnShippingFees",
+    "merchantReturnLink": "{{ shop.url }}/pages/returns"
+  }
+}
+</script>
