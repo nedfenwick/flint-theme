@@ -1,0 +1,155 @@
+{%- comment -%}
+  FLINT — ASSURANCE STRIP
+
+  The four questions a first-time visitor asks before they will consider
+  buying from a shop they have never heard of: what does delivery cost, can I
+  send it back, what if it breaks, and is there anyone there.
+
+  Answered in four lines near the top of the page, with the numbers in them.
+  "Free UK delivery over £50" converts; "we pride ourselves on service" does
+  not. Every claim here must match the delivery and returns pages exactly — if
+  one changes, change both.
+
+  Deliberately plain: hairline rules, no boxes, no badges, no colour. It is
+  reassurance, not decoration, and it should not compete with the hero.
+{%- endcomment -%}
+
+<section class="flint-assure{% if section.settings.band %} flint-band{% endif %}">
+  <div class="flint-container">
+    <ul class="flint-assure__grid" style="--assure-cols: {{ section.blocks.size }};">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'item' -%}
+          <li class="flint-assure__item" {{ block.shopify_attributes }}>
+            <span class="flint-assure__icon" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'van' -%}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15">
+                    <path d="M1.5 6.5h12v9h-12z"/><path d="M13.5 9.5h4l3 3v3h-7z"/>
+                    <circle cx="6" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/>
+                  </svg>
+                {%- when 'return' -%}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15">
+                    <path d="M4 9h11a5 5 0 0 1 0 10H8"/><path d="M7.5 5.5 4 9l3.5 3.5"/>
+                  </svg>
+                {%- when 'shield' -%}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15">
+                    <path d="M12 2.5 4.5 5.5v6c0 4.5 3 8 7.5 10 4.5-2 7.5-5.5 7.5-10v-6z"/>
+                    <path d="m8.8 11.8 2.3 2.3 4.1-4.6"/>
+                  </svg>
+                {%- when 'note' -%}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15">
+                    <path d="M2.5 5.5h19v13h-19z"/><path d="m2.5 6.5 9.5 6.5 9.5-6.5"/>
+                  </svg>
+                {%- when 'lock' -%}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15">
+                    <path d="M5.5 10.5h13v9h-13z"/><path d="M8.5 10.5V7a3.5 3.5 0 0 1 7 0v3.5"/>
+                  </svg>
+                {%- else -%}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15">
+                    <circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 2.5 2.5 4.5-5"/>
+                  </svg>
+              {%- endcase -%}
+            </span>
+
+            {%- if block.settings.link != blank -%}
+              <a class="flint-assure__body" href="{{ block.settings.link }}">
+                <span class="flint-assure__title">{{ block.settings.title }}</span>
+                {%- if block.settings.note != blank -%}
+                  <span class="flint-assure__note">{{ block.settings.note }}</span>
+                {%- endif -%}
+              </a>
+            {%- else -%}
+              <span class="flint-assure__body">
+                <span class="flint-assure__title">{{ block.settings.title }}</span>
+                {%- if block.settings.note != blank -%}
+                  <span class="flint-assure__note">{{ block.settings.note }}</span>
+                {%- endif -%}
+              </span>
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .flint-assure { padding-block: var(--sp-5); }
+  .flint-assure__grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--assure-cols, 4), minmax(0, 1fr));
+    gap: var(--sp-4) var(--grid-gap);
+    border-top: var(--hairline) solid var(--border-default);
+    border-bottom: var(--hairline) solid var(--border-default);
+    padding-block: var(--sp-4);
+  }
+  @media (max-width: 899px) { .flint-assure__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .flint-assure__grid { grid-template-columns: 1fr; gap: var(--sp-3); } }
+
+  .flint-assure__item { margin: 0; display: flex; gap: var(--sp-3); align-items: flex-start; }
+  .flint-assure__icon { flex: 0 0 auto; color: var(--brass); line-height: 0; margin-top: 1px; }
+
+  .flint-assure__body { display: block; text-decoration: none; color: inherit; border: 0; }
+  a.flint-assure__body:hover .flint-assure__title { color: var(--brass-deep); }
+
+  .flint-assure__title {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: var(--size-small);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+  .flint-assure__note {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: var(--size-cap);
+    color: var(--text-secondary);
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Assurance strip",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "band", "label": "Tinted background", "default": false },
+    { "type": "paragraph", "content": "Keep every claim identical to the delivery and returns pages. A promise here that the policy page contradicts is worse than no promise at all." }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Assurance",
+      "limit": 5,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "tick",
+          "options": [
+            { "value": "van", "label": "Delivery" },
+            { "value": "return", "label": "Returns" },
+            { "value": "shield", "label": "Guarantee" },
+            { "value": "note", "label": "Contact" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "tick", "label": "Tick" }
+          ] },
+        { "type": "text", "id": "title", "label": "Headline", "default": "Free UK delivery over £50" },
+        { "type": "text", "id": "note", "label": "Supporting line" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Assurance strip",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "van", "title": "Free UK delivery over £50" } },
+        { "type": "item", "settings": { "icon": "return", "title": "14 days to change your mind" } },
+        { "type": "item", "settings": { "icon": "shield", "title": "Two-year guarantee" } },
+        { "type": "item", "settings": { "icon": "note", "title": "Answered within one working day" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
