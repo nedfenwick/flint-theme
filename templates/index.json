@@ -66,8 +66,9 @@
       "type": "flint-product-grid",
       "settings": {
         "label": "New this season",
+        "collection": "new-this-season",
         "limit": 4,
-        "link_label": "Shop all lighting",
+        "link_label": "View all",
         "band": false
       }
     },
