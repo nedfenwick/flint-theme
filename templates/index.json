@@ -13,21 +13,48 @@
       "type": "flint-hero",
       "settings": {
         "heading": "Lighting, well considered.",
-        "link_label": "View the range",
-        "link": "shopify://collections/wall-lights"
+        "link_label": "Shop all lighting",
+        "link": "/collections"
       }
+    },
+    "assurance": {
+      "type": "flint-assurance",
+      "blocks": {
+        "delivery": { "type": "item", "settings": {
+          "icon": "van",
+          "title": "Free UK delivery over £50",
+          "note": "Tracked, dispatched from the UK. £4.99 below that.",
+          "link": "/pages/delivery" } },
+        "returns": { "type": "item", "settings": {
+          "icon": "return",
+          "title": "14 days to change your mind",
+          "note": "And 30 days to reject anything faulty.",
+          "link": "/pages/returns" } },
+        "guarantee": { "type": "item", "settings": {
+          "icon": "shield",
+          "title": "Two-year guarantee",
+          "note": "On top of your statutory rights, not instead of them.",
+          "link": "/pages/guarantee" } },
+        "contact": { "type": "item", "settings": {
+          "icon": "note",
+          "title": "Answered within one working day",
+          "note": "By a person who knows the range.",
+          "link": "/pages/contact" } }
+      },
+      "block_order": ["delivery", "returns", "guarantee", "contact"],
+      "settings": { "band": false }
     },
     "categories": {
       "type": "flint-category-grid",
       "blocks": {
         "wall": { "type": "tile", "settings": { "collection": "wall-lights", "placeholder": "flint-ph-product-alden-wall-light.webp" } },
-        "picture": { "type": "tile", "settings": { "collection": "picture-lights", "placeholder": "flint-ph-product-hartley-picture-light.webp" } },
         "pendant": { "type": "tile", "settings": { "collection": "pendant-lights", "placeholder": "flint-ph-product-elmore-pendant.webp" } },
+        "picture": { "type": "tile", "settings": { "collection": "picture-lights", "placeholder": "flint-ph-product-hartley-picture-light.webp" } },
         "table": { "type": "tile", "settings": { "collection": "table-lamps", "placeholder": "flint-ph-product-marle-table-lamp.webp" } },
         "ceiling": { "type": "tile", "settings": { "collection": "ceiling-lights", "placeholder": "flint-ph-product-elmore-pendant.webp" } },
         "outdoor": { "type": "tile", "settings": { "collection": "outdoor-lights", "placeholder": "flint-ph-product-alden-wall-light.webp" } }
       },
-      "block_order": ["wall", "picture", "pendant", "table", "ceiling", "outdoor"],
+      "block_order": ["wall", "pendant", "picture", "table", "ceiling", "outdoor"],
       "settings": {
         "label": "Shop by category",
         "columns": 6,
@@ -35,107 +62,50 @@
         "band": false
       }
     },
-    "collection_feature": {
-      "type": "flint-collection-feature",
+    "products": {
+      "type": "flint-product-grid",
       "settings": {
-        "label": "Selected collection",
-        "heading": "The Cley Collection",
-        "body": "Nine pieces in aged brass and bronze, drawn from the flint villages of the north Norfolk coast. Built for the weather they get there, and for hallways that see a lot of it.",
-        "link_label": "Explore the collection",
-        "placeholder": "flint-ph-room-restaurant.webp",
-        "image_right": false,
-        "band": true
+        "label": "New this season",
+        "limit": 4,
+        "link_label": "Shop all lighting",
+        "band": false
       }
     },
     "statement": {
       "type": "flint-editorial-statement",
       "settings": {
         "statement": "The details that finish a room should be considered as carefully as the room itself. That is the whole of it.",
-        "link_label": "Our approach",
-        "band": false
+        "link_label": "About Flint",
+        "link": "/pages/about",
+        "band": true
       }
     },
-    "rooms": {
-      "type": "flint-category-grid",
-      "blocks": {
-        "kitchen": { "type": "tile", "settings": { "title": "Kitchen", "placeholder": "flint-ph-room-kitchen.webp" } },
-        "bedroom": { "type": "tile", "settings": { "title": "Bedroom", "placeholder": "flint-ph-room-bedroom.webp" } },
-        "bathroom": { "type": "tile", "settings": { "title": "Bathroom", "collection": "bathroom-lighting", "placeholder": "flint-ph-room-bathroom.webp" } },
-        "hallway": { "type": "tile", "settings": { "title": "Hallway", "placeholder": "flint-ph-room-hallway.webp" } }
-      },
-      "block_order": ["kitchen", "bedroom", "bathroom", "hallway"],
-      "settings": {
-        "label": "Shop by room",
-        "columns": 4,
-        "ratio": "room",
-        "band": false
-      }
-    },
-    "material": {
-      "type": "flint-material-story",
-      "settings": {
-        "label": "Material story",
-        "heading": "Aged brass, and how it changes",
-        "body": "Unlacquered brass darkens where it is touched and lightens where it is not. In five years a handle, a switch and a wall light will not match — which is the point.",
-        "link_label": "Materials & finishes",
-        "alt_1": "Unlacquered aged brass, close up",
-        "placeholder_1": "flint-ph-material-aged-brass.webp",
-        "alt_2": "Bronze, close up",
-        "placeholder_2": "flint-ph-material-bronze.webp"
-      }
-    },
-    "products": {
+    "hardware": {
       "type": "flint-product-grid",
       "settings": {
-        "label": "New this season",
+        "label": "Hardware",
+        "collection": "hardware",
         "limit": 4,
-        "link_label": "View all",
+        "link_label": "Shop hardware",
         "band": false
-      }
-    },
-    "trade": {
-      "type": "flint-trade-block",
-      "settings": {
-        "label": "Flint Trade",
-        "heading": "For designers, architects and developers",
-        "body": "Trade pricing from your first order. Specification sheets and dimensioned drawings on every product. Finish samples posted free.",
-        "link_label": "Open a trade account",
-        "placeholder": "flint-ph-room-restaurant.webp"
-      }
-    },
-    "journal": {
-      "type": "flint-journal-grid",
-      "blocks": {
-        "a1": { "type": "article", "settings": { "kicker": "Guide", "title": "How high should wall lights be?", "placeholder": "flint-ph-room-bedroom.webp" } },
-        "a2": { "type": "article", "settings": { "kicker": "Guide", "title": "Lighting a kitchen island", "placeholder": "flint-ph-room-kitchen.webp" } },
-        "a3": { "type": "article", "settings": { "kicker": "Story", "title": "Lighting an old house without ruining it", "placeholder": "flint-ph-room-hallway.webp" } }
-      },
-      "block_order": ["a1", "a2", "a3"],
-      "settings": {
-        "label": "From the Journal",
-        "blog": "journal",
-        "link_label": "All guides"
       }
     },
     "newsletter": {
       "type": "flint-newsletter",
       "settings": {
         "label": "Newsletter",
-        "heading": "New pieces, guides and the occasional project",
+        "heading": "New pieces and the occasional guide",
         "body": "Roughly twice a month. No offers."
       }
     }
   },
   "order": [
     "hero",
+    "assurance",
     "categories",
-    "collection_feature",
-    "statement",
-    "rooms",
-    "material",
     "products",
-    "trade",
-    "journal",
+    "statement",
+    "hardware",
     "newsletter"
   ]
 }
