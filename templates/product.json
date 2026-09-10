@@ -9,7 +9,18 @@
  */
 {
   "sections": {
-    "main": { "type": "flint-main-product", "settings": {} },
+    "main": {
+      "type": "flint-main-product",
+      "settings": {
+        "show_vat": false,
+        "delivery_note": "Free UK delivery over £50.",
+        "despatch": "Dispatched within 1 working day",
+        "returns": "14 days",
+        "guarantee": "2 years",
+        "install_note": "Fitting should be carried out by a qualified electrician. Fixings and instructions are supplied.",
+        "delivery_detail": "Free UK delivery on orders over £50, otherwise £4.99. Dispatched from the UK within one working day, on a tracked service. You have 14 days from delivery to change your mind, and 30 days to reject anything faulty."
+      }
+    },
     "family": { "type": "flint-design-family-section", "settings": {} }
   },
   "order": ["main", "family"]
