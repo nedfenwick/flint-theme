@@ -1,37 +1,45 @@
 {%- comment -%}
   FLINT — PRODUCT GRID (§24, section 07)
   Four products, eight maximum. Merchandised by hand. Prices shown plainly.
+
+  If the chosen collection is empty, the whole section renders nothing on the
+  live site — heading included. An orphaned section label with white space
+  under it reads as a broken page, which costs more trust than the missing
+  row would have earned. In the theme editor it stays visible, with an
+  explanation, so nobody wonders where their section went.
 {%- endcomment -%}
 
 {%- assign products = section.settings.collection.products -%}
 
-<section class="flint-section flint-section--home{% if section.settings.band %} flint-section--band{% endif %}">
-  <div class="flint-container">
+{%- if products.size > 0 or request.design_mode -%}
+  <section class="flint-section flint-section--home{% if section.settings.band %} flint-section--band{% endif %}">
+    <div class="flint-container">
 
-    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-5); margin-bottom: var(--sp-5);">
-      {%- if section.settings.label != blank -%}
-        <p class="flint-label">{{ section.settings.label }}</p>
-      {%- endif -%}
-      {%- if section.settings.link_label != blank and section.settings.collection != blank -%}
-        <a class="flint-link" href="{{ section.settings.collection.url }}">{{ section.settings.link_label }}</a>
-      {%- endif -%}
-    </div>
-
-    {%- if products.size > 0 -%}
-      <div class="flint-tiles" style="--cols: 4; --cols-md: 2; --cols-sm: 2;">
-        {%- for product in products limit: section.settings.limit -%}
-          {% render 'flint-product-card', product: product %}
-        {%- endfor -%}
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-5); margin-bottom: var(--sp-5);">
+        {%- if section.settings.label != blank -%}
+          <p class="flint-label">{{ section.settings.label }}</p>
+        {%- endif -%}
+        {%- if section.settings.link_label != blank and section.settings.collection != blank -%}
+          <a class="flint-link" href="{{ section.settings.collection.url }}">{{ section.settings.link_label }}</a>
+        {%- endif -%}
       </div>
-    {%- elsif request.design_mode -%}
-      <p class="flint-small">
-        Choose a collection with products in it to populate this section.
-        It is hidden on the live site until then.
-      </p>
-    {%- endif -%}
 
-  </div>
-</section>
+      {%- if products.size > 0 -%}
+        <div class="flint-tiles" style="--cols: 4; --cols-md: 2; --cols-sm: 2;">
+          {%- for product in products limit: section.settings.limit -%}
+            {% render 'flint-product-card', product: product %}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p class="flint-small">
+          Choose a collection with products in it to populate this section.
+          It is hidden on the live site until then.
+        </p>
+      {%- endif -%}
+
+    </div>
+  </section>
+{%- endif -%}
 
 {% schema %}
 {
