@@ -15,11 +15,7 @@
         "general": { "type": "route", "settings": {
           "label": "General enquiries",
           "email": "hello@flintlighting.com",
-          "note": "Orders, deliveries, returns, and anything you are not sure who to ask." } },
-        "spec": { "type": "route", "settings": {
-          "label": "Choosing a fitting",
-          "email": "hello@flintlighting.com",
-          "note": "Tell us the room, the ceiling height and what the light is for, and we will tell you honestly — including when the answer is that we do not sell the right thing." } },
+          "note": "Orders, deliveries, returns, and anything you are not sure who to ask. We answer within one working day." } },
 
         "faq_where": { "type": "faq", "settings": {
           "question": "Where is my order?",
@@ -58,7 +54,7 @@
           "answer": "<p>Some of them are meant to. Unlacquered brass and similar living finishes darken and mark with handling and age, and two pieces will never be quite identical. We say so on the product page.</p><p>That is the material behaving as it should, not a fault — but if you want a finish that stays exactly as it arrived, tell us and we will point you at one.</p>" } }
       },
       "block_order": [
-        "general", "spec",
+        "general",
         "faq_where", "faq_howlong", "faq_highlands", "faq_returns",
         "faq_damaged", "faq_electrician", "faq_bathroom", "faq_vat", "faq_finish"
       ],
